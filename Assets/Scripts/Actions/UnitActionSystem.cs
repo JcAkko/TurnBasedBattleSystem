@@ -25,6 +25,9 @@ public class UnitActionSystem : MonoBehaviour
     // create an event to change the visual of the unit upon selection
     public event EventHandler OnSelectedShowVisual;
 
+    // bool used to check if there is an action running or not
+    private bool isRunningAction;
+
 
     private void Awake()
     {
@@ -43,6 +46,11 @@ public class UnitActionSystem : MonoBehaviour
 
     private void Update()
     {
+        // if there is an action running, do not update
+        if (isRunningAction)
+        {
+            return;
+        }
         
         // move the selected target when mouse click on floor
         if (Input.GetMouseButtonDown(0))
@@ -55,9 +63,12 @@ public class UnitActionSystem : MonoBehaviour
             // check if the postion mouse clicked on is a valid move position
             if (selectedUnit.GetMoveAction().IsThisGridValidMovePosition(mouseGridPosition))
             {
+                // set the action system as running
+                SetRunningAction();
                 // if so, move the unit
                 // reach the moveaction script and move the selected unit funciton
-                selectedUnit.GetMoveAction().MoveUnitTo(mouseGridPosition);
+                // once finish movement, use delegate to reset the running action bool to false
+                selectedUnit.GetMoveAction().MoveUnitTo(mouseGridPosition, SetNotRunningAction);
             }
             
         }
@@ -66,8 +77,10 @@ public class UnitActionSystem : MonoBehaviour
         // spin function
         if (Input.GetMouseButtonDown(1))
         {
+            // set the action system as running
+            SetRunningAction();
             // spin
-            selectedUnit.GetSpinAction().SpinUnit(); ;
+            selectedUnit.GetSpinAction().SpinUnit(SetNotRunningAction);
 
         }
     }
@@ -121,6 +134,19 @@ public class UnitActionSystem : MonoBehaviour
     public UnitBasic GetSelectedUnit()
     {
         return selectedUnit;
+    }
+
+
+    // this function set action as running
+    private void SetRunningAction()
+    {
+        isRunningAction = true;
+    }
+
+    //this function set action as not running
+    private void SetNotRunningAction()
+    {
+        isRunningAction = false;
     }
 
 

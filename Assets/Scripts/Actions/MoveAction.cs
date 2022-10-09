@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -72,6 +73,8 @@ public class MoveAction : BaseAction
             unitAnimator.SetBool("isWalking", false);
             // set the action to disactive
             isActive = false;
+            // call delegate 
+            onActionComplete();
         }
 
         // always rotate the plaer towards the moving direction
@@ -84,8 +87,10 @@ public class MoveAction : BaseAction
 
     // function is used to expose the movement logic
     // this function will be public in order for unitActionSytem to call
-    public void MoveUnitTo(GridPosition gridPosition_)
+    public void MoveUnitTo(GridPosition gridPosition_, Action OnMovementComplete_)
     {
+        // sign the delegate
+        this.onActionComplete = OnMovementComplete_;
         // update the target position
         targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition_);
         // set the action as active

@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SpinAction : BaseAction
 {
+
    
     // used to store spin amount
     private float totalSpinAmount;
+
+
 
 
     private void Update()
@@ -37,14 +41,19 @@ public class SpinAction : BaseAction
         if (totalSpinAmount >= 360f)
         {
             isActive = false;
+            // call delegate 
+            onActionComplete();
         }
 
     }
 
 
     // used to call spin from outside
-    public void SpinUnit()
+    // take an delegate function to call when function ends
+    public void SpinUnit(Action onSpinActionComplete_)
     {
+        // sign the delegate
+        this.onActionComplete = onSpinActionComplete_;
         // reset the spin amount
         totalSpinAmount = 0;
         // start spin

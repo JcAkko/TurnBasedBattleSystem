@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,12 @@ public abstract class BaseAction : MonoBehaviour
 
     // refer to the unitBasic
     protected UnitBasic unit;
+
+
+    // delegate used to represent a function that might be called when spin action finished
+    // use using System and call Action<> instead of creat one 
+    // Action<> returns void while Func<> returns the type inside <>
+    protected Action onActionComplete;
 
     protected virtual void Awake()
     {
