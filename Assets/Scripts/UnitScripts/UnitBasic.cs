@@ -8,6 +8,9 @@ public class UnitBasic : MonoBehaviour
     // use to store the current grid positon of the unit
     private GridPosition currentGridPostion;
 
+    // list of actions that unit has
+    private BaseAction[] baseActionArray;
+
     // expose the moveaction linked to the unit
     private MoveAction moveAction;
 
@@ -20,6 +23,8 @@ public class UnitBasic : MonoBehaviour
         moveAction = this.GetComponent<MoveAction>();
         // find the spinaction
         spinAction = this.GetComponent<SpinAction>();
+        // store all the actions into the array
+        baseActionArray = GetComponents<BaseAction>();
     }
 
     private void Start()
@@ -75,7 +80,11 @@ public class UnitBasic : MonoBehaviour
         return currentGridPostion;
     }
 
-
+    // function used to expose the baseActionArray
+    public BaseAction[] GetBaseActionArray()
+    {
+        return baseActionArray;
+    }
 
     
 }

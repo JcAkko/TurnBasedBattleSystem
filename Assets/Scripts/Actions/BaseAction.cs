@@ -30,5 +30,9 @@ public abstract class BaseAction : MonoBehaviour
     }
 
 
+    // abstract that will force all the child actions to define this function
+    public abstract string GetActionName();
+
+
 
 }

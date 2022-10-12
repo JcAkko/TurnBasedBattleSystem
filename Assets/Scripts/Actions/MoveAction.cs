@@ -157,6 +157,13 @@ public class MoveAction : BaseAction
         List<GridPosition> validGridPositions = GetValidGridPositionList();
         // test if the list contains the position
         return validGridPositions.Contains(gridPosition_);
-    } 
+    }
+
+
+    // define the getaction name function
+    public override string GetActionName()
+    {
+        return "Move";
+    }
 
 }

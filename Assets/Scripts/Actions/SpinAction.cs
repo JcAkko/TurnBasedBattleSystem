@@ -60,4 +60,11 @@ public class SpinAction : BaseAction
         isActive = true;
        
     }
+
+
+    // define the getaction name function
+    public override string GetActionName()
+    {
+        return "Spin";
+    }
 }

@@ -23,10 +23,10 @@ public class UnitActionSystem : MonoBehaviour
     private LayerMask unitLayerMask;
 
     // create an event to change the visual of the unit upon selection
-    public event EventHandler OnSelectedShowVisual;
+    public event EventHandler OnSelectedUnitChange;
 
     // bool used to check if there is an action running or not
-    private bool isRunningAction;
+    private bool isExcutingAction;
 
 
     private void Awake()
@@ -47,7 +47,7 @@ public class UnitActionSystem : MonoBehaviour
     private void Update()
     {
         // if there is an action running, do not update
-        if (isRunningAction)
+        if (isExcutingAction)
         {
             return;
         }
@@ -64,11 +64,11 @@ public class UnitActionSystem : MonoBehaviour
             if (selectedUnit.GetMoveAction().IsThisGridValidMovePosition(mouseGridPosition))
             {
                 // set the action system as running
-                SetRunningAction();
+                StartExcuteAction();
                 // if so, move the unit
                 // reach the moveaction script and move the selected unit funciton
                 // once finish movement, use delegate to reset the running action bool to false
-                selectedUnit.GetMoveAction().MoveUnitTo(mouseGridPosition, SetNotRunningAction);
+                selectedUnit.GetMoveAction().MoveUnitTo(mouseGridPosition, EndExcuteAction);
             }
             
         }
@@ -78,9 +78,9 @@ public class UnitActionSystem : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             // set the action system as running
-            SetRunningAction();
+            StartExcuteAction();
             // spin
-            selectedUnit.GetSpinAction().SpinUnit(SetNotRunningAction);
+            selectedUnit.GetSpinAction().SpinUnit(EndExcuteAction);
 
         }
     }
@@ -121,11 +121,11 @@ public class UnitActionSystem : MonoBehaviour
 
         //OnSelectedShowVisual?.Invoke(this, EventArgs.Empty);
 
-        // call visual change for all the evet subscriber
-        if (OnSelectedShowVisual != null)
+        // call selected unit change for all the evet subscriber
+        if (OnSelectedUnitChange != null)
         {
             // sender is this, no event args so set it to empty
-            OnSelectedShowVisual(this, EventArgs.Empty);
+            OnSelectedUnitChange(this, EventArgs.Empty);
         }
     }
 
@@ -138,15 +138,15 @@ public class UnitActionSystem : MonoBehaviour
 
 
     // this function set action as running
-    private void SetRunningAction()
+    private void StartExcuteAction()
     {
-        isRunningAction = true;
+        isExcutingAction = true;
     }
 
     //this function set action as not running
-    private void SetNotRunningAction()
+    private void EndExcuteAction()
     {
-        isRunningAction = false;
+        isExcutingAction = false;
     }
 
 
