@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 
@@ -17,6 +18,9 @@ public class UnitActionSystem : MonoBehaviour
     // this unit that been selected
     [SerializeField]
     private UnitBasic selectedUnit;
+
+    // the current selected action
+    private BaseAction selectedAction;
 
     // layer mask for the unit
     [SerializeField]
@@ -44,6 +48,13 @@ public class UnitActionSystem : MonoBehaviour
     }
 
 
+    private void Start()
+    {
+        // defualt select the unit
+        SetSelectedUnit(selectedUnit);
+    }
+
+
     private void Update()
     {
         // if there is an action running, do not update
@@ -51,59 +62,83 @@ public class UnitActionSystem : MonoBehaviour
         {
             return;
         }
+
+
+        // if the pointer is over game object, it mean the mouse the on an UI element, so do not execute action
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        // if selected new unit, skip the unit movement function for the current frame
+        if (TryUnitSelection())
+        {
+            return;
+        }
+
+        // execute the action
+        HandleSelectedAction();
         
-        // move the selected target when mouse click on floor
+    }
+
+
+    // function used to execute the current selected action
+    private void HandleSelectedAction()
+    {
+        
+
         if (Input.GetMouseButtonDown(0))
         {
-            // if selected new unit, skip the unit movement function for the current frame
-            if (TryUnitSelection()) return;
 
             // convert the mouse world position into the grid postion
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseCast.GetMousePosition());
-            // check if the postion mouse clicked on is a valid move position
-            if (selectedUnit.GetMoveAction().IsThisGridValidMovePosition(mouseGridPosition))
+
+            // validate if the mouse grid positon is a valid position
+            if (selectedAction.IsThisGridValidMovePosition(mouseGridPosition))
             {
                 // set the action system as running
                 StartExcuteAction();
-                // if so, move the unit
-                // reach the moveaction script and move the selected unit funciton
-                // once finish movement, use delegate to reset the running action bool to false
-                selectedUnit.GetMoveAction().MoveUnitTo(mouseGridPosition, EndExcuteAction);
+
+                // execute the selected action
+                selectedAction.TakeAction(mouseGridPosition, EndExcuteAction);
+
             }
-            
-        }
-
-
-        // spin function
-        if (Input.GetMouseButtonDown(1))
-        {
-            // set the action system as running
-            StartExcuteAction();
-            // spin
-            selectedUnit.GetSpinAction().SpinUnit(EndExcuteAction);
 
         }
     }
+
+
 
     // function that handles the unit selection
     private bool TryUnitSelection()
     {
 
-        // cast ray to catch the mouse position
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        // does ray cast, if hit unit, get the unitBasic script
-        if (Physics.Raycast(ray, out RaycastHit rayCastHit, float.MaxValue, unitLayerMask))
+        // left mouse click to check
+        if (Input.GetMouseButtonDown(0))
         {
-            // if there is the UnitBasic component on the object, return it
-            // if there is not returns false
-            if (rayCastHit.transform.TryGetComponent<UnitBasic>(out UnitBasic unit))
+            // cast ray to catch the mouse position
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // does ray cast, if hit unit, get the unitBasic script
+            if (Physics.Raycast(ray, out RaycastHit rayCastHit, float.MaxValue, unitLayerMask))
             {
-                // sign the selected unit
-                SetSelectedUnit(unit);
-                // return true
-                return true;
+                // if there is the UnitBasic component on the object, return it
+                // if there is not returns false
+                if (rayCastHit.transform.TryGetComponent<UnitBasic>(out UnitBasic unit))
+                {
+                    // if the unit is already selected, do not seleted again
+                    if (unit == selectedUnit)
+                    {
+                        return false;
+                    }
+                    // sign the selected unit
+                    SetSelectedUnit(unit);
+                    // return true
+                    return true;
+                }
             }
+
         }
+
 
         // if nothing hit by ray
         return false;
@@ -117,7 +152,8 @@ public class UnitActionSystem : MonoBehaviour
     {
         // sign the selected unit
         selectedUnit = unit_;
-        // sign the 
+        // sign the default action as the move action
+        SetSelectedAction(unit_.GetMoveAction());
 
         //OnSelectedShowVisual?.Invoke(this, EventArgs.Empty);
 
@@ -130,10 +166,23 @@ public class UnitActionSystem : MonoBehaviour
     }
 
 
+    // function used to switch the selected action
+    public void SetSelectedAction(BaseAction action_)
+    {
+        selectedAction = action_;
+    }
+
+
     // this function exposes the selected unit
     public UnitBasic GetSelectedUnit()
     {
         return selectedUnit;
+    }
+
+    // function used to expose the selected action
+    public BaseAction GetSelectedAction()
+    {
+        return selectedAction;
     }
 
 

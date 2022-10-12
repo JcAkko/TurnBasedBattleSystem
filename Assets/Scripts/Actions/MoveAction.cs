@@ -87,7 +87,7 @@ public class MoveAction : BaseAction
 
     // function is used to expose the movement logic
     // this function will be public in order for unitActionSytem to call
-    public void MoveUnitTo(GridPosition gridPosition_, Action OnMovementComplete_)
+    public override void TakeAction(GridPosition gridPosition_, Action OnMovementComplete_)
     {
         // sign the delegate
         this.onActionComplete = OnMovementComplete_;
@@ -99,7 +99,7 @@ public class MoveAction : BaseAction
 
 
     // this function is used to return moveable grids as a list
-    public List<GridPosition> GetValidGridPositionList()
+    public override List<GridPosition> GetValidGridPositionList()
     {
         // create a list
         List<GridPosition> validGridPositions = new List<GridPosition>();
@@ -149,15 +149,6 @@ public class MoveAction : BaseAction
         return validGridPositions;
     }
 
-
-    // function used to test if one gridpostion is a valid movepostion for the unit
-    public bool IsThisGridValidMovePosition(GridPosition gridPosition_)
-    {
-        // get the current valid position list
-        List<GridPosition> validGridPositions = GetValidGridPositionList();
-        // test if the list contains the position
-        return validGridPositions.Contains(gridPosition_);
-    }
 
 
     // define the getaction name function

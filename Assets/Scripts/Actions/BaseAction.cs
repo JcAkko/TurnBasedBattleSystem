@@ -34,5 +34,26 @@ public abstract class BaseAction : MonoBehaviour
     public abstract string GetActionName();
 
 
+    // action that unit execute 
+    // action required the unit current positon as well as the function to execute when acion finished
+    public abstract void TakeAction(GridPosition gridPosition_, Action onActionComplete_);
 
-}
+
+    // function used to test if one gridpostion is a valid movepostion for the unit
+    public virtual bool IsThisGridValidMovePosition(GridPosition gridPosition_)
+    {
+        // get the current valid position list
+        List<GridPosition> validGridPositions = GetValidGridPositionList();
+        // test if the list contains the position
+        return validGridPositions.Contains(gridPosition_);
+    }
+
+
+    // this function is used to return moveable grids as a list
+    public abstract List<GridPosition> GetValidGridPositionList();
+   
+
+
+
+
+    }

@@ -22,6 +22,15 @@ public class ActionButtonUI : MonoBehaviour
     {
         // update the text
         buttonText.text = baseAction_.GetActionName();
+        // sign the button click event
+        button.onClick.AddListener(() =>
+        {
+            // sign the current action as this action
+            UnitActionSystem.Instance.SetSelectedAction(baseAction_);
+        
+       
+        
+        });
     }
     
 }

@@ -90,8 +90,10 @@ public class GridSystemVisual : MonoBehaviour
     // function used to update the grid visuals
     private void UpdateGridVisuals()
     {
+        // hide all the grids first
         HideAllGridVisuals();
-        ShowGridVisualsOnList(UnitActionSystem.Instance.GetSelectedUnit().GetMoveAction().GetValidGridPositionList());
+        // only shows the one that validate
+        ShowGridVisualsOnList(UnitActionSystem.Instance.GetSelectedAction().GetValidGridPositionList());
 
     }
 

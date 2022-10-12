@@ -50,7 +50,7 @@ public class SpinAction : BaseAction
 
     // used to call spin from outside
     // take an delegate function to call when function ends
-    public void SpinUnit(Action onSpinActionComplete_)
+    public override void TakeAction(GridPosition gridPosition_, Action onSpinActionComplete_)
     {
         // sign the delegate
         this.onActionComplete = onSpinActionComplete_;
@@ -67,4 +67,23 @@ public class SpinAction : BaseAction
     {
         return "Spin";
     }
-}
+
+
+    public override List<GridPosition> GetValidGridPositionList()
+    {
+        // get the current grid positon of the unit
+        GridPosition unitGridPosition = unit.GetUnitCurrentGridPosition();
+
+        // return a list of the current unit positon
+        return new List<GridPosition>
+        {
+            unitGridPosition
+        };
+
+
+    }
+
+
+
+
+    }
