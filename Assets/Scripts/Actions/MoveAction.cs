@@ -52,7 +52,7 @@ public class MoveAction : BaseAction
     private void unitMovement()
     {
         // define the stopping distance
-        float stoppingDistance = 0.01f;
+        float stoppingDistance = 0.05f;
 
         // calculate the vector from unit origin position to the target position
         Vector3 movingDirection = (targetPosition - this.transform.position).normalized;
@@ -60,12 +60,25 @@ public class MoveAction : BaseAction
         // only move the unit when out of stopping distance
         if (Vector3.Distance(targetPosition, this.transform.position) >= stoppingDistance)
         {
+            // turn to the right direction first and then move
+            if (this.transform.forward != movingDirection)
+            {
+                // always rotate the plaer towards the moving direction
+                // use lerp for smooth transition
+                this.transform.forward = Vector3.Lerp(this.transform.forward, movingDirection, Time.deltaTime * rotationSpeed);
+
+            }
+            else
+            {
+                // move the unit towards the target positon
+                this.transform.position += movingDirection * unitMovingSpeed * Time.deltaTime;
+
+                // play the walking animation
+                unitAnimator.SetBool("isWalking", true);
+
+            }
             
-            // move the unit towards the target positon
-            this.transform.position += movingDirection * unitMovingSpeed * Time.deltaTime;
             
-            // play the walking animation
-            unitAnimator.SetBool("isWalking", true);
         }
         else
         {
@@ -77,9 +90,9 @@ public class MoveAction : BaseAction
             onActionComplete();
         }
 
-        // always rotate the plaer towards the moving direction
         // use lerp for smooth transition
-        this.transform.forward = Vector3.Lerp(this.transform.forward, movingDirection, Time.deltaTime * rotationSpeed);
+        // use the code here if want move and rotation happend at the same time
+        //this.transform.forward = Vector3.Lerp(this.transform.forward, movingDirection, Time.deltaTime * rotationSpeed);
 
 
     }
