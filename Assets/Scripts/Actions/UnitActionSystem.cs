@@ -29,6 +29,13 @@ public class UnitActionSystem : MonoBehaviour
     // create an event to change the visual of the unit upon selection
     public event EventHandler OnSelectedUnitChange;
 
+    // create an event to change the visual of the action upon active action changes
+    public event EventHandler OnSelectedActionChange;
+
+    // create an event to hide or show the action busy UI
+    // this event return a bool by checking the isExcutingAction variable
+    public event EventHandler<bool> OnActionBusyChange;
+
     // bool used to check if there is an action running or not
     private bool isExcutingAction;
 
@@ -170,6 +177,13 @@ public class UnitActionSystem : MonoBehaviour
     public void SetSelectedAction(BaseAction action_)
     {
         selectedAction = action_;
+
+        // call selected action change for all the evet subscriber
+        if (OnSelectedActionChange != null)
+        {
+            // sender is this, nothing to return so set args to empty
+            OnSelectedActionChange(this, EventArgs.Empty);
+        }
     }
 
 
@@ -190,12 +204,18 @@ public class UnitActionSystem : MonoBehaviour
     private void StartExcuteAction()
     {
         isExcutingAction = true;
+
+        // fire the event
+        OnActionBusyChange?.Invoke(this, isExcutingAction);
     }
 
     //this function set action as not running
     private void EndExcuteAction()
     {
         isExcutingAction = false;
+
+        // fire the event
+        OnActionBusyChange?.Invoke(this, isExcutingAction);
     }
 
 
