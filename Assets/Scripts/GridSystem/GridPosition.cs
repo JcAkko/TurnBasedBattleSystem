@@ -5,7 +5,7 @@ using System;
 
 
 // this is used to store the grid position on x and z only
-// use struct instead of class because I want be able to modify the gridpositon as a copy not a reference
+// use struct instead of class because I want to modify the gridpositon as a copy not a reference
 public struct GridPosition : IEqautable<GridPosition>
 {
     // the positon on x axis

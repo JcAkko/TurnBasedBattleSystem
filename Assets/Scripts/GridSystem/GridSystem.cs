@@ -29,7 +29,7 @@ public class GridSystem
         gridObjectArray = new GridObject[xlength,zlength];
 
         // visual
-        // populate all the grid objects on each grod center
+        // populate all the grid objects on each grid center
         for (int x = 0; x< xlength_; x++)
         {
             for (int z = 0; z < zlength_; z++)
