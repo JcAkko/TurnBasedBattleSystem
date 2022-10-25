@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,16 @@ public class UnitBasic : MonoBehaviour
     // expose the spin action script attached to the unit
     private SpinAction spinAction;
 
+    // the max action Points for a unit
+    [SerializeField] private int maxActionPoint = 2;
+
+    // dynamic action points for the unit
+    private int actionPoints = 2;
+
+
+    // static event that fired on every point change
+    public static event EventHandler OnAnyActionPointChange;
+
     private void Awake()
     {
         // find the moveaction attached to the unit
@@ -25,6 +36,8 @@ public class UnitBasic : MonoBehaviour
         spinAction = this.GetComponent<SpinAction>();
         // store all the actions into the array
         baseActionArray = GetComponents<BaseAction>();
+        // update the action point
+        actionPoints = maxActionPoint;
     }
 
     private void Start()
@@ -32,6 +45,12 @@ public class UnitBasic : MonoBehaviour
         // find the grid postion of this unit and sign the unit to the grid object
         currentGridPostion = LevelGrid.Instance.GetGridPosition(this.transform.position);
         LevelGrid.Instance.SetUnitAtGridPosition(currentGridPostion, this);
+
+        // listen to the turn change event to refresh the action point
+        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+
+        
+
     }
 
 
@@ -86,5 +105,62 @@ public class UnitBasic : MonoBehaviour
         return baseActionArray;
     }
 
-    
+
+    // function used to expose the action points
+    public int GetActionPoints()
+    {
+        return actionPoints;
+    }
+
+    // function used to test if unit still have action point
+    public bool DoUnitHaveEnoughActionPoints(BaseAction action_)
+    {
+        // return true if have enough to take the action
+        return actionPoints >= action_.GetActionPointsCost();
+        
+    }
+
+
+    // function used to use the action points upon spend
+    private void SpendActionPoint(int points_)
+    {
+        actionPoints -= points_;
+
+        // just incase
+        if (actionPoints < 0)
+        {
+            actionPoints = 0;
+        }
+
+        // on points change
+        OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
+    }
+
+
+    // function that try spend the action point if have enought ap to spend
+    public bool TryUseAPToTakeAction(BaseAction action_)
+    {
+        if (DoUnitHaveEnoughActionPoints(action_))
+        {
+            // spend the action points
+            SpendActionPoint(action_.GetActionPointsCost());
+            // true
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // recharge the action point upon turn changed
+    private void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
+    {
+        // set the action point back to max
+        actionPoints = maxActionPoint;
+        // on points change
+        OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
+    }
+
+
 }

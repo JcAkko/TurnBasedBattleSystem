@@ -36,6 +36,9 @@ public class UnitActionSystem : MonoBehaviour
     // this event return a bool by checking the isExcutingAction variable
     public event EventHandler<bool> OnActionBusyChange;
 
+    // event use to spend the action point upon action started
+    public event EventHandler OnActionStarted;
+
     // bool used to check if there is an action running or not
     private bool isExcutingAction;
 
@@ -103,12 +106,25 @@ public class UnitActionSystem : MonoBehaviour
             // validate if the mouse grid positon is a valid position
             if (selectedAction.IsThisGridValidMovePosition(mouseGridPosition))
             {
-                // set the action system as running
-                StartExcuteAction();
+                // test if the selected unit have enough action points to take the action
+                if (selectedUnit.TryUseAPToTakeAction(selectedAction))
+                {
+                    // set the action system as running
+                    StartExcuteAction();
 
-                // execute the selected action
-                selectedAction.TakeAction(mouseGridPosition, EndExcuteAction);
+                    // execute the selected action
+                    selectedAction.TakeAction(mouseGridPosition, EndExcuteAction);
 
+                    // let unit consume its action points
+                    OnActionStarted?.Invoke(this, EventArgs.Empty);
+
+                }
+                else
+                {
+                    Debug.Log("Unit do not have enough action point to act");
+                }
+                
+                
             }
 
         }

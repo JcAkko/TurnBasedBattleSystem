@@ -51,9 +51,17 @@ public abstract class BaseAction : MonoBehaviour
 
     // this function is used to return moveable grids as a list
     public abstract List<GridPosition> GetValidGridPositionList();
+
+
+    // function used to expose the action cost
+    public virtual int GetActionPointsCost()
+    {
+        // default is 1
+        return 1;
+    }
    
 
 
 
 
-    }
+}

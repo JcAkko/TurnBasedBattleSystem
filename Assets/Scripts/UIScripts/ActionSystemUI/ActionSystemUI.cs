@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ActionSystemUI : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class ActionSystemUI : MonoBehaviour
     // action button holder
     [SerializeField]
     private Transform actionButtonsFolder;
+
+
+    // action points text
+    [SerializeField]
+    private TextMeshProUGUI actionPointTextUI;
 
     // list that holds all the populated action UI buttons
     private List<ActionButtonUI> actionButtonUiList;
@@ -33,10 +39,19 @@ public class ActionSystemUI : MonoBehaviour
         // subscribe and listen to the action change event
         UnitActionSystem.Instance.OnSelectedActionChange += UnitActionSystem_OnSelectedAvtionChange;
 
+        // subscribe and listen the unit taking action, update action point upon action start
+        UnitActionSystem.Instance.OnActionStarted += UnitActionSystem_OnActionStarted;
+
+        // subscribe the turn end event and update the action points
+        //TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+        UnitBasic.OnAnyActionPointChange += UnitBasic_OnAnyActionPointChange;
+
         // create action UI buttons
         PopulateActionUIButtons();
         // update the selected visual
         UpdateSelectedVisual();
+        // update the action points
+        UpdateActionPoints();
     }
 
 
@@ -78,6 +93,9 @@ public class ActionSystemUI : MonoBehaviour
 
         // update the active action buttons
         UpdateSelectedVisual();
+
+        // update the action points
+        UpdateActionPoints();
     }
 
 
@@ -87,6 +105,13 @@ public class ActionSystemUI : MonoBehaviour
 
         // update the active action buttons
         UpdateSelectedVisual();
+    }
+
+    // function called when action is taken, update the action points
+    private void UnitActionSystem_OnActionStarted(object sender, EventArgs empty)
+    {
+        // refresh the action point text
+        UpdateActionPoints();
     }
 
 
@@ -99,6 +124,28 @@ public class ActionSystemUI : MonoBehaviour
             // loop through all the button UI, high light the selected button
             buttonUI.UpdateSelectedVisual();
         }
+    }
+
+
+    // function used to update the action point
+    private void UpdateActionPoints()
+    {
+        // get the current selected unit
+        int currentActionPoints = UnitActionSystem.Instance.GetSelectedUnit().GetActionPoints();
+        // update the text
+        actionPointTextUI.text = "Action Points: " + currentActionPoints.ToString();
+    }
+
+    // update the action points upon turn change
+    private void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
+    {
+        UpdateActionPoints();
+    }
+
+    // update the action points upon turn change
+    private void UnitBasic_OnAnyActionPointChange(object sender, EventArgs empty)
+    {
+        UpdateActionPoints();
     }
 
 
