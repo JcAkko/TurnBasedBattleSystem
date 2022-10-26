@@ -11,6 +11,9 @@ public class TurnSystem : MonoBehaviour
     // track the current turn number
     private int turnNumber = 1;
 
+    // is the current turn player turn
+    private bool isPlayerTurn = true;
+
     // event called when turn number changed
     public event EventHandler OnTurnChanged;
 
@@ -40,7 +43,16 @@ public class TurnSystem : MonoBehaviour
     public void NextTurn()
     {
         turnNumber++;
+        // switch between player and enemy turn
+        isPlayerTurn = !isPlayerTurn;
         // fire the on turn change event
         OnTurnChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+
+    // function used to expose if the current turn is player turn
+    public bool IsPlayerTurn()
+    {
+        return isPlayerTurn;
     }
 }

@@ -16,6 +16,10 @@ public class TurnSystemUI : MonoBehaviour
     [SerializeField]
     private Button EndTurnButton;
 
+    // the enemy turn UI
+    [SerializeField]
+    private GameObject EnemyTurnUI;
+
 
     private void Start()
     {
@@ -32,6 +36,10 @@ public class TurnSystemUI : MonoBehaviour
 
         // update the turn number
         UpdateTurnNumber();
+
+        // update the enemy turn UI and the end turn button UI
+        UpdateEnemyTurnUI();
+        HideEndTurnButtonUponEnemyPhase();
     }
 
 
@@ -45,5 +53,23 @@ public class TurnSystemUI : MonoBehaviour
     private void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
     {
         UpdateTurnNumber();
+        UpdateEnemyTurnUI();
+        HideEndTurnButtonUponEnemyPhase();
     }
+
+
+    // update the enemy turn UI is its the enemy turn
+    private void UpdateEnemyTurnUI()
+    {
+        EnemyTurnUI.SetActive(!TurnSystem.Instance.IsPlayerTurn());
+    }
+
+    // function used to hide the end turn button when its enemy turn
+    private void HideEndTurnButtonUponEnemyPhase()
+    {
+        // only show it during player's turn
+        EndTurnButton.gameObject.SetActive(TurnSystem.Instance.IsPlayerTurn());
+    }
+
+
 }

@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class UnitBasic : MonoBehaviour
 {
+    // used to identify if the unit is an enemy or player unit
+    [SerializeField]
+    private bool isEnemy;
     
     // use to store the current grid positon of the unit
     private GridPosition currentGridPostion;
@@ -156,10 +159,23 @@ public class UnitBasic : MonoBehaviour
     // recharge the action point upon turn changed
     private void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
     {
-        // set the action point back to max
-        actionPoints = maxActionPoint;
-        // on points change
-        OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
+        // only recharge the AP if: unit is enemy and it is the enemy turn or unit is player and its the unit turn
+        if ((IsUnitEnemy() && !TurnSystem.Instance.IsPlayerTurn()) || (!IsUnitEnemy() && TurnSystem.Instance.IsPlayerTurn()))
+        {
+            // set the action point back to max
+            actionPoints = maxActionPoint;
+            // on points change
+            OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
+
+        }
+        
+    }
+
+
+    // function used to expose if the unit is enemy
+    public bool IsUnitEnemy()
+    {
+        return isEnemy;
     }
 
 

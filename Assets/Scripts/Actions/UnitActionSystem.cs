@@ -73,6 +73,12 @@ public class UnitActionSystem : MonoBehaviour
             return;
         }
 
+        // ***if the current turn is not player turn, can do nothing
+        if (!TurnSystem.Instance.IsPlayerTurn())
+        {
+            return;
+        }
+
 
         // if the pointer is over game object, it mean the mouse the on an UI element, so do not execute action
         if (EventSystem.current.IsPointerOverGameObject())
@@ -150,6 +156,12 @@ public class UnitActionSystem : MonoBehaviour
                 {
                     // if the unit is already selected, do not seleted again
                     if (unit == selectedUnit)
+                    {
+                        return false;
+                    }
+
+                    // if the unit is enemy, can not select
+                    if (unit.IsUnitEnemy())
                     {
                         return false;
                     }
