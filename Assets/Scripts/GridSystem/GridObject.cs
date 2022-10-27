@@ -60,6 +60,21 @@ public class GridObject
     }
 
 
+    // function used to return the first unit on the unitlist
+    public UnitBasic GetFirstUnitOnList()
+    {
+        if (IsOccupied())
+        {
+            return unitList[0];
+        }
+        else
+        {
+            return null;
+        }
+        
+    }
+
+
     // function used to check if this grid is occupied by any unit
     public bool IsOccupied()
     {

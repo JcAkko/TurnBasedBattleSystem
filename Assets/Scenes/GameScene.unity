@@ -973,6 +973,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3115420920439378500, guid: b4f8fc7cd435d144cb2090d00beac4d0,
+        type: 3}
+      propertyPath: maxAttackDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3788895679906057036, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
       propertyPath: rotationSpeed
@@ -996,7 +1001,7 @@ PrefabInstance:
     - target: {fileID: 4639306477540181124, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
       propertyPath: maxActionPoint
-      value: 4
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4639306477540181130, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
@@ -3471,6 +3476,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3115420920439378500, guid: b4f8fc7cd435d144cb2090d00beac4d0,
+        type: 3}
+      propertyPath: maxAttackDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3788895679906057036, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
       propertyPath: rotationSpeed
@@ -3494,7 +3504,7 @@ PrefabInstance:
     - target: {fileID: 4639306477540181124, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
       propertyPath: maxActionPoint
-      value: 2
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4639306477540181130, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}

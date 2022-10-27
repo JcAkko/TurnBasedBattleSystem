@@ -40,9 +40,8 @@ public class SpinAction : BaseAction
         // if exceed 360, stop spin
         if (totalSpinAmount >= 360f)
         {
-            isActive = false;
-            // call delegate 
-            onActionComplete();
+            // call delegate from base action
+            ActionComplete();
         }
 
     }
@@ -52,12 +51,11 @@ public class SpinAction : BaseAction
     // take an delegate function to call when function ends
     public override void TakeAction(GridPosition gridPosition_, Action onSpinActionComplete_)
     {
-        // sign the delegate
-        this.onActionComplete = onSpinActionComplete_;
+        // sign the delegate and set the action as active
+        ActionStart(onSpinActionComplete_);
         // reset the spin amount
         totalSpinAmount = 0;
-        // start spin
-        isActive = true;
+        
        
     }
 

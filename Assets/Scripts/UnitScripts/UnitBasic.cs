@@ -102,6 +102,13 @@ public class UnitBasic : MonoBehaviour
         return currentGridPostion;
     }
 
+
+    // get the unit world position
+    public Vector3 GetUnitWorldPosition()
+    {
+        return transform.position;
+    }
+
     // function used to expose the baseActionArray
     public BaseAction[] GetBaseActionArray()
     {
@@ -176,6 +183,13 @@ public class UnitBasic : MonoBehaviour
     public bool IsUnitEnemy()
     {
         return isEnemy;
+    }
+
+
+    // take damage from attack
+    public void TakeDamage()
+    {
+        Debug.Log(this.transform + " receive damage");
     }
 
 

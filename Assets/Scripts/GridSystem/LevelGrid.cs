@@ -107,6 +107,20 @@ public class LevelGrid : MonoBehaviour
 
     }
 
+
+    // function used to return the unit that occupying the grid
+    public UnitBasic GetUnitOnGrid(GridPosition gridPosition_)
+    {
+        // find the grid object
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition_);
+        // try get the unit on the grid position
+        return gridObject.GetFirstUnitOnList();
+
+    }
+
+
+
+
     // function used to expose the getwidth function in gridsystem
     public int GetSystemWidth()
     {

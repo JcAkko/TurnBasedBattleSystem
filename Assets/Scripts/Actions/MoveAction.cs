@@ -84,10 +84,8 @@ public class MoveAction : BaseAction
         {
             // stop the walking animation
             unitAnimator.SetBool("isWalking", false);
-            // set the action to disactive
-            isActive = false;
-            // call delegate 
-            onActionComplete();
+            // call delegate from base action
+            ActionComplete();
         }
 
         // use lerp for smooth transition
@@ -102,12 +100,12 @@ public class MoveAction : BaseAction
     // this function will be public in order for unitActionSytem to call
     public override void TakeAction(GridPosition gridPosition_, Action OnMovementComplete_)
     {
-        // sign the delegate
-        this.onActionComplete = OnMovementComplete_;
+        // sign the delegate and set the action as active
+        ActionStart(OnMovementComplete_);
+        
         // update the target position
         targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition_);
-        // set the action as active
-        isActive = true;
+        
     }
 
 

@@ -59,7 +59,26 @@ public abstract class BaseAction : MonoBehaviour
         // default is 1
         return 1;
     }
-   
+
+
+    // common funciton that all child should apply upon action start
+    protected void ActionStart(Action onActionComplete_)
+    {
+        isActive = true;
+        // sign the delegate
+        this.onActionComplete = onActionComplete_;
+
+    }
+
+
+    // common funciton that all child should apply upon action complete
+    protected void ActionComplete()
+    {
+        isActive = false;
+        onActionComplete();
+    }
+
+
 
 
 
