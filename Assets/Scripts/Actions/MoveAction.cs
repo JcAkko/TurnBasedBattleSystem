@@ -17,13 +17,15 @@ public class MoveAction : BaseAction
     private float rotationSpeed = 10.0f;
 
 
-    // refer to the unit animator
-    [SerializeField]
-    private Animator unitAnimator;
-
     // the max movement distance for the unit
     [SerializeField]
     private int maxMoveDistance = 3;
+
+
+    // two events that handle to unit walking animation upon start and stop moving
+    public event EventHandler OnUnitStartMoving;
+    public event EventHandler OnUnitStopMoving;
+
 
 
     protected override void Awake()
@@ -70,11 +72,11 @@ public class MoveAction : BaseAction
             }
             else
             {
+                // start playing animation
+                OnUnitStartMoving?.Invoke(this, EventArgs.Empty);
+
                 // move the unit towards the target positon
                 this.transform.position += movingDirection * unitMovingSpeed * Time.deltaTime;
-
-                // play the walking animation
-                unitAnimator.SetBool("isWalking", true);
 
             }
             
@@ -83,7 +85,8 @@ public class MoveAction : BaseAction
         else
         {
             // stop the walking animation
-            unitAnimator.SetBool("isWalking", false);
+            OnUnitStopMoving?.Invoke(this, EventArgs.Empty);
+            
             // call delegate from base action
             ActionComplete();
         }

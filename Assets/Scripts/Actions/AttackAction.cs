@@ -23,11 +23,20 @@ public class AttackAction : BaseAction
     [SerializeField]
     private int maxAttackDistance = 1;
 
+    // the damage amount
+    [SerializeField]
+    private int damageAmount = 20;
+
     // used to store the target unit
     private UnitBasic targetUnit;
 
     // bool to check if can start attacking
     private bool canStartSlashing;
+
+
+    // two events that handle to unit slash animation
+    public event EventHandler OnUnitStartSlashing;
+
 
 
     private void Update()
@@ -199,14 +208,18 @@ public class AttackAction : BaseAction
 
         // can start attacking
         canStartSlashing = true;
+
+        // start the slashing animation
+        OnUnitStartSlashing?.Invoke(this, EventArgs.Empty);
     }
 
 
     // slash logic
     private void Slash()
     {
+        
         // damage to the target
-        targetUnit.TakeDamage();
+        targetUnit.TakeDamage(damageAmount);
 
     }
 

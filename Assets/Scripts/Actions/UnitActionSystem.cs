@@ -115,7 +115,7 @@ public class UnitActionSystem : MonoBehaviour
                 // test if the selected unit have enough action points to take the action
                 if (selectedUnit.TryUseAPToTakeAction(selectedAction))
                 {
-                    // set the action system as running
+                    // set the action bool as running
                     StartExcuteAction();
 
                     // execute the selected action

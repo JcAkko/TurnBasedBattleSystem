@@ -65,7 +65,7 @@ public abstract class BaseAction : MonoBehaviour
     protected void ActionStart(Action onActionComplete_)
     {
         isActive = true;
-        // sign the delegate
+        // sign the delegate and run it when action complete
         this.onActionComplete = onActionComplete_;
 
     }

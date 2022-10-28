@@ -21,6 +21,9 @@ public class UnitBasic : MonoBehaviour
     // expose the spin action script attached to the unit
     private SpinAction spinAction;
 
+    // get the health system from the unit
+    private HealthSystem healthSystem;
+
     // the max action Points for a unit
     [SerializeField] private int maxActionPoint = 2;
 
@@ -37,6 +40,8 @@ public class UnitBasic : MonoBehaviour
         moveAction = this.GetComponent<MoveAction>();
         // find the spinaction
         spinAction = this.GetComponent<SpinAction>();
+        // sign the health system
+        healthSystem = this.GetComponent<HealthSystem>();
         // store all the actions into the array
         baseActionArray = GetComponents<BaseAction>();
         // update the action point
@@ -51,6 +56,9 @@ public class UnitBasic : MonoBehaviour
 
         // listen to the turn change event to refresh the action point
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+
+        // subscribe to the health system on unit death
+        healthSystem.onUnitDeath += healthSystem_OnUnitDeath;
 
         
 
@@ -187,9 +195,19 @@ public class UnitBasic : MonoBehaviour
 
 
     // take damage from attack
-    public void TakeDamage()
+    public void TakeDamage(int damageAmount_)
     {
-        Debug.Log(this.transform + " receive damage");
+        healthSystem.TakeDamage(damageAmount_);
+    }
+
+
+    // action takes upon unit death
+    private void healthSystem_OnUnitDeath(object sender, EventArgs empty)
+    {
+        // remove the unit from the grid
+        LevelGrid.Instance.RemoveUnitAtGridPosition(currentGridPostion, this);
+        // destory object for now
+        Destroy(this.gameObject);
     }
 
 

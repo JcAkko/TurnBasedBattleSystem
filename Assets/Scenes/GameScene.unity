@@ -975,6 +975,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3115420920439378500, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
+      propertyPath: damageAmount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3115420920439378500, guid: b4f8fc7cd435d144cb2090d00beac4d0,
+        type: 3}
       propertyPath: maxAttackDistance
       value: 1
       objectReference: {fileID: 0}
@@ -1875,6 +1880,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4661420645752200770, guid: 53e304bc52e77b643ac4a5ca230cfc18,
+        type: 3}
+      propertyPath: health
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 8127480098153713506, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}
       propertyPath: m_Name
@@ -2638,7 +2648,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1327639918
 GameObject:
@@ -3215,6 +3225,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1580772220}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1685972310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1685972311}
+  m_Layer: 0
+  m_Name: SlashEffect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1685972311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685972310}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.44, y: 3.61, z: 4.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1753683958
 GameObject:
   m_ObjectHideFlags: 0
@@ -3478,6 +3519,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3115420920439378500, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
+      propertyPath: damageAmount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3115420920439378500, guid: b4f8fc7cd435d144cb2090d00beac4d0,
+        type: 3}
       propertyPath: maxAttackDistance
       value: 1
       objectReference: {fileID: 0}
@@ -3583,7 +3629,7 @@ PrefabInstance:
     - target: {fileID: 8205249608364785554, guid: 07b05aa9bf32dce40aa9388bc452b7c0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8205249608364785554, guid: 07b05aa9bf32dce40aa9388bc452b7c0,
         type: 3}

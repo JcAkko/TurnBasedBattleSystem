@@ -7,6 +7,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3746260564210989796, guid: b4f8fc7cd435d144cb2090d00beac4d0,
+        type: 3}
+      propertyPath: unitRagdollPrefab
+      value: 
+      objectReference: {fileID: 3555546794890443215, guid: 3feee049e65f2654286d1ec6c976816a,
+        type: 3}
     - target: {fileID: 4372203823053128774, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
       propertyPath: m_LocalScale.x

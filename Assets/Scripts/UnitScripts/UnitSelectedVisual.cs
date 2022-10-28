@@ -49,4 +49,12 @@ public class UnitSelectedVisual : MonoBehaviour
     }
 
 
+    // function that stop the scrip from listening to the OnSelectedUnitChange event upon unit death
+    private void OnDestroy()
+    {
+        // unsbscribe the event
+        UnitActionSystem.Instance.OnSelectedUnitChange -= UnitActionSystem_OnSelectedShowVisual;
+    }
+
+
 }
