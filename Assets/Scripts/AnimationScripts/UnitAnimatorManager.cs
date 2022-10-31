@@ -9,8 +9,9 @@ public class UnitAnimatorManager : MonoBehaviour
     [SerializeField]
     private Animator unitAnimator;
 
+  
 
-    private void Update()
+    private void Start()
     {
         // try get the move action of the unit
         if (TryGetComponent<MoveAction>(out MoveAction moveAction))
