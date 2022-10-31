@@ -87,7 +87,7 @@ public class MoveAction : BaseAction
             // stop the walking animation
             OnUnitStopMoving?.Invoke(this, EventArgs.Empty);
             
-            // call delegate from base action
+            // call delegate from base action and end the action
             ActionComplete();
         }
 
@@ -103,12 +103,13 @@ public class MoveAction : BaseAction
     // this function will be public in order for unitActionSytem to call
     public override void TakeAction(GridPosition gridPosition_, Action OnMovementComplete_)
     {
-        // sign the delegate and set the action as active
-        ActionStart(OnMovementComplete_);
         
         // update the target position
         targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition_);
-        
+
+        // Set the action as active and start execute action
+        ActionStart(OnMovementComplete_);
+
     }
 
 

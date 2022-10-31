@@ -51,12 +51,11 @@ public class SpinAction : BaseAction
     // take an delegate function to call when function ends
     public override void TakeAction(GridPosition gridPosition_, Action onSpinActionComplete_)
     {
-        // sign the delegate and set the action as active
-        ActionStart(onSpinActionComplete_);
         // reset the spin amount
         totalSpinAmount = 0;
-        
-       
+
+        // Set the action as active and start execute action
+        ActionStart(onSpinActionComplete_);
     }
 
 

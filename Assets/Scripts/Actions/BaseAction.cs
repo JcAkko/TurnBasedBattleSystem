@@ -23,6 +23,13 @@ public abstract class BaseAction : MonoBehaviour
     // Action<> returns void while Func<> returns the type inside <>
     protected Action onActionComplete;
 
+
+    // static event called on every action to help other system detected if action start or complete
+    public static event EventHandler OnAnyActionStarted;
+    public static event EventHandler onAnyActionCompleted;
+
+
+
     protected virtual void Awake()
     {
         // get the unitBasic script upon awake
@@ -62,24 +69,36 @@ public abstract class BaseAction : MonoBehaviour
 
 
     // common funciton that all child should apply upon action start
+    // inside each action, call this function after everything are all setup to avoid potential issues
     protected void ActionStart(Action onActionComplete_)
     {
         isActive = true;
         // sign the delegate and run it when action complete
         this.onActionComplete = onActionComplete_;
 
+        // fire off the action start event
+        OnAnyActionStarted?.Invoke(this, EventArgs.Empty);
+
     }
 
 
     // common funciton that all child should apply upon action complete
+    // 
     protected void ActionComplete()
     {
         isActive = false;
         onActionComplete();
+
+        // fire off the action complete event
+        onAnyActionCompleted?.Invoke(this, EventArgs.Empty);
     }
 
 
-
+    // expose the unit
+    public UnitBasic GetUnit()
+    {
+        return unit;
+    }
 
 
 

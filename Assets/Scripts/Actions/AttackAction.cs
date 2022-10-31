@@ -108,7 +108,7 @@ public class AttackAction : BaseAction
                 stateTimer = coolOffStateTime;
                 break;
             case State.CoolOff:
-                // call delegate from base action
+                // call delegate from base action and end the action
                 ActionComplete();
                 break;
         }
@@ -195,8 +195,6 @@ public class AttackAction : BaseAction
     // take an delegate function to call when function ends
     public override void TakeAction(GridPosition gridPosition_, Action onAttackActionComplete_)
     {
-        // sign the delegate and set the action as active
-        ActionStart(onAttackActionComplete_);
 
         // get the target unit from the grid position
         targetUnit = LevelGrid.Instance.GetUnitOnGrid(gridPosition_);
@@ -211,8 +209,10 @@ public class AttackAction : BaseAction
 
         // start the slashing animation
         OnUnitStartSlashing?.Invoke(this, EventArgs.Empty);
-    }
 
+        // set the action as active and start execute action
+        ActionStart(onAttackActionComplete_);
+    }
 
     // slash logic
     private void Slash()
@@ -221,6 +221,13 @@ public class AttackAction : BaseAction
         // damage to the target
         targetUnit.TakeDamage(damageAmount);
 
+    }
+
+
+    // function used to expose the target unit
+    public UnitBasic GetTargetUnit()
+    {
+        return targetUnit;
     }
 
 }
