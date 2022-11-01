@@ -15,8 +15,10 @@ public class SingleGridVisualControl : MonoBehaviour
     }
 
     // function used to enable the meshRender
-    public void EnableMeshRender()
+    public void EnableMeshRender(Material gridMat_)
     {
         meshRender.enabled = true;
+        // sign the materal
+        meshRender.material = gridMat_;
     }
 }

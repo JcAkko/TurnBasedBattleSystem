@@ -82,10 +82,14 @@ public class UnitBasic : MonoBehaviour
         // if the location is new, then update the grid info
         if (newGridPos != currentGridPostion)
         {
-            // unit changed grid postion
-            LevelGrid.Instance.UpdateUnitGridPosition(this, currentGridPostion, newGridPos);
+            // recrod the old positon
+            GridPosition oldGridPos = currentGridPostion;
+            
             // updat the current grid positon
             currentGridPostion = newGridPos;
+
+            // unit changed grid postion
+            LevelGrid.Instance.UpdateUnitGridPosition(this, oldGridPos, newGridPos);
         }
     }
 

@@ -230,4 +230,10 @@ public class AttackAction : BaseAction
         return targetUnit;
     }
 
+    // function used to expose the attac range
+    public int GetAttackRange()
+    {
+        return maxAttackDistance;
+    }
+
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,8 @@ public class LevelGrid : MonoBehaviour
     // refer to the grid system of the game
     private GridSystem gridSystem;
 
-
+    // event fird on any unit grid pos change
+    public event EventHandler OnAnyUnitGridPosChange;
 
     private void Awake()
     {
@@ -89,6 +91,8 @@ public class LevelGrid : MonoBehaviour
         RemoveUnitAtGridPosition(oldGridPos_, unit_);
         // setup the new positon
         SetUnitAtGridPosition(newGridPos_, unit_);
+        // fire the unit grid pos change event
+        OnAnyUnitGridPosChange?.Invoke(this, EventArgs.Empty);
     }
 
     // function used to expose the grid validation function from the gridSystem
