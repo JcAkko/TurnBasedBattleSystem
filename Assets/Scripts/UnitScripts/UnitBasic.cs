@@ -33,6 +33,9 @@ public class UnitBasic : MonoBehaviour
 
     // static event that fired on every point change
     public static event EventHandler OnAnyActionPointChange;
+    // two event called when unit spawned or dead
+    public static event EventHandler OnAnyUnitSpawned;
+    public static event EventHandler OnAnyUnitDead;
 
     private void Awake()
     {
@@ -60,7 +63,8 @@ public class UnitBasic : MonoBehaviour
         // subscribe to the health system on unit death
         healthSystem.onUnitDeath += healthSystem_OnUnitDeath;
 
-        
+        // call unit spawned upon start
+        OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty);
 
     }
 
@@ -210,8 +214,11 @@ public class UnitBasic : MonoBehaviour
     {
         // remove the unit from the grid
         LevelGrid.Instance.RemoveUnitAtGridPosition(currentGridPostion, this);
+        // call unit death event
+        OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
         // destory object for now
         Destroy(this.gameObject);
+        
     }
 
 
