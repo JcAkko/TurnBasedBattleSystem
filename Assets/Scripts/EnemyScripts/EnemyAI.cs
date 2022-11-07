@@ -9,18 +9,22 @@ public class EnemyAI : MonoBehaviour
     // state machine for AI
     private enum State
     {
+        // idle state
         waitingForEnemyPhase,
+        // enemy take action one at a time, after each action check if can take more
+        // if not, switch to busy state
         TakingAction,
+        // only switch to this state if not more action can take
         Busy,
     }
 
-    // current state
+    // used to store the current state
     private State currentState;
 
     // timer for all state
     private float stateTimer;
 
-    // for time config
+    // for timeer for takingAction state
     private float timer;
 
 
@@ -38,7 +42,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        // ***if the current turn is player turn, can do nothing
+        // ***if the current turn is player turn, do nothing
         if (TurnSystem.Instance.IsPlayerTurn())
         {
             return;
@@ -61,9 +65,11 @@ public class EnemyAI : MonoBehaviour
                 if (timer < 0)
                 {
                     
-                    // try take the actual action if there is enemy unit exist
-                    if(EnemyAITryTakeAction(SetStateTakingAction))
+                    // try take action if there is an enemy unit exist in game
+                    // after function compelet, reset the state back to TakingAction if enemies still can take action
+                    if(TryFindEnemyToTakeAction(SetStateTakingAction))
                     {
+                        // only come to this point if all enemy units used their action points
                         // set the state to busy
                         currentState = State.Busy;
                     }
@@ -85,7 +91,7 @@ public class EnemyAI : MonoBehaviour
     
     // function used to make AI take action
     // delegate called when the action complete, state set back to the taking action state
-    private bool EnemyAITryTakeAction(Action onEnemyAIActionComplete_)
+    private bool TryFindEnemyToTakeAction(Action onEnemyAIActionComplete_)
     {
         // loop through all the enemies and take action
         foreach (UnitBasic enemyUnit in UnitManager.Instance.GetEnemyUnitList())
@@ -105,6 +111,60 @@ public class EnemyAI : MonoBehaviour
     // function for the selected unit to take action
     private bool EnemyTryTakeAction(UnitBasic enemyUnit_, Action onEnemyAIActionComplete_)
     {
+        // temp used to track which is the best action to take
+        EnemyAIAction currentBestAIAction = null;
+
+        // the best action
+        BaseAction bestAction = null;
+        
+        // loop through all the actions that this enemy has and find the best action to take
+        foreach (BaseAction baseAction_ in enemyUnit_.GetBaseActionArray())
+        {
+            // check if enemy have enough action point to take action
+            // if so, spend the cost
+            if (!enemyUnit_.TryUseAPToTakeAction(baseAction_))
+            {
+                // do not have enough points
+                continue;
+            }
+            
+            if (currentBestAIAction == null)
+            {
+                currentBestAIAction = baseAction_.GetBestAIAction();
+                bestAction = baseAction_;
+            }
+            else
+            {
+                // if already have the best one, compare, if the new one if better, replace
+                EnemyAIAction newAIAction = baseAction_.GetBestAIAction();
+                if (newAIAction != null &&  newAIAction.actionValue > currentBestAIAction.actionValue)
+                {
+                    // replace
+                    currentBestAIAction = newAIAction;
+                    bestAction = baseAction_;
+                }
+            }
+        }
+
+
+        // double check again if there is a best action and unit can take the action
+        if (currentBestAIAction != null && enemyUnit_.TryUseAPToTakeAction(bestAction))
+        {
+            // take action
+            bestAction.TakeAction(currentBestAIAction.gridPostion, onEnemyAIActionComplete_);
+            // spend the cost
+            enemyUnit_.SpendCost(bestAction);
+            Debug.Log("Enemy take action: " + bestAction.GetActionName());
+            return true;
+        }
+        else
+        {
+            Debug.Log("Unit do not have enough action point to act");
+            return false;
+        }
+
+
+        /*
         // test: get the spin action from enemy
         SpinAction spinAction = enemyUnit_.GetSpinAction();
 
@@ -121,7 +181,6 @@ public class EnemyAI : MonoBehaviour
                 // execute the selected action
                 spinAction.TakeAction(actionGridPosition, onEnemyAIActionComplete_);
                 return true;
-
             }
             else
             {
@@ -129,11 +188,10 @@ public class EnemyAI : MonoBehaviour
                 return false;
             }
 
-
         }
 
-
         return false;
+        */
     }
 
 
@@ -141,6 +199,7 @@ public class EnemyAI : MonoBehaviour
     // reset the state back to taking action
     private void SetStateTakingAction()
     {
+        // reset the takingAction timer
         timer = 0.5f;
         // set state
         currentState = State.TakingAction;
@@ -154,6 +213,7 @@ public class EnemyAI : MonoBehaviour
         // if the current state is the enemy turn, increment the timer
         if (!TurnSystem.Instance.IsPlayerTurn())
         {
+            // enemy turn start
             currentState = State.TakingAction;
             timer = 2.0f;
         }

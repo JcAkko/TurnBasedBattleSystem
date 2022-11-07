@@ -101,5 +101,46 @@ public abstract class BaseAction : MonoBehaviour
     }
 
 
+    // every action have to define this function to sign its own AI action value and grid position
+    public abstract EnemyAIAction GetEnemyAIAction(GridPosition gridPosition_);
+
+
+    // this function returns the best AI action on list based on the AI action value
+    public EnemyAIAction GetBestAIAction()
+    {
+        // list to hold all the AIActions
+        List<EnemyAIAction> enemyAIActionList = new List<EnemyAIAction>();
+
+        // list with all the movablle grid positions
+        List<GridPosition> validActionGridPositionList = GetValidGridPositionList();
+
+        // loop through all the valid grid positions and compare their action value
+        foreach (GridPosition validGridPos_ in validActionGridPositionList)
+        {
+            // check the action Value for each grid
+             EnemyAIAction enemyAIAction = GetEnemyAIAction(validGridPos_);
+            // add it into the list
+            enemyAIActionList.Add(enemyAIAction);
+        }
+
+        // if the list is not empty
+        if (enemyAIActionList.Count > 0)
+        {
+            // sort the list
+            enemyAIActionList.Sort((EnemyAIAction a, EnemyAIAction b) => b.actionValue - a.actionValue);
+            // return the highest action point
+            return enemyAIActionList[0];
+
+        }
+        else
+        {
+            return null;
+        }
+
+        
+
+    }
+
+
 
 }

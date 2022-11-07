@@ -10,7 +10,9 @@ public class SpinAction : BaseAction
     // used to store spin amount
     private float totalSpinAmount;
 
-
+    // the action cost of the action
+    [SerializeField]
+    private int actionCost = 1;
 
 
     private void Update()
@@ -65,7 +67,6 @@ public class SpinAction : BaseAction
         return "Spin";
     }
 
-
     public override List<GridPosition> GetValidGridPositionList()
     {
         // get the current grid positon of the unit
@@ -84,10 +85,20 @@ public class SpinAction : BaseAction
     // override the action cost
     public override int GetActionPointsCost()
     {
-        return 2;
+        return actionCost;
     }
 
 
-
-
+    // sign the enemy AI Action info for the AI usage
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition_)
+    {
+        // return the spin action AI action info
+        return new EnemyAIAction
+        {
+            // construction
+            gridPostion = gridPosition_,
+            // spin has the lowest action value 
+            actionValue = 0,
+        };
+    }
 }

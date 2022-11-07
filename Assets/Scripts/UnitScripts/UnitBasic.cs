@@ -21,14 +21,17 @@ public class UnitBasic : MonoBehaviour
     // expose the spin action script attached to the unit
     private SpinAction spinAction;
 
+    // expose the shoot action script attached to the unit
+    private AttackAction attackAction;
+
     // get the health system from the unit
     private HealthSystem healthSystem;
 
     // the max action Points for a unit
-    [SerializeField] private int maxActionPoint = 2;
+    [SerializeField] private int maxActionPoint = 10;
 
     // dynamic action points for the unit
-    private int actionPoints = 2;
+    private int actionPoints = 10;
 
 
     // static event that fired on every point change
@@ -43,6 +46,8 @@ public class UnitBasic : MonoBehaviour
         moveAction = this.GetComponent<MoveAction>();
         // find the spinaction
         spinAction = this.GetComponent<SpinAction>();
+        // find the attackAction
+        attackAction = this.GetComponent<AttackAction>();
         // sign the health system
         healthSystem = this.GetComponent<HealthSystem>();
         // store all the actions into the array
@@ -112,6 +117,13 @@ public class UnitBasic : MonoBehaviour
     }
 
 
+    // expose the attack action
+    public AttackAction GetAttackAction()
+    {
+        return attackAction;
+    }
+
+
     // functions used to expose the unit current grid position
     public GridPosition GetUnitCurrentGridPosition()
     {
@@ -168,8 +180,7 @@ public class UnitBasic : MonoBehaviour
     {
         if (DoUnitHaveEnoughActionPoints(action_))
         {
-            // spend the action points
-            SpendActionPoint(action_.GetActionPointsCost());
+            
             // true
             return true;
         }
@@ -177,6 +188,13 @@ public class UnitBasic : MonoBehaviour
         {
             return false;
         }
+    }
+
+
+    // function used to spend the cost for taking an action
+    public void SpendCost(BaseAction action_)
+    {
+        SpendActionPoint(action_.GetActionPointsCost());
     }
 
     // recharge the action point upon turn changed
@@ -206,6 +224,12 @@ public class UnitBasic : MonoBehaviour
     public void TakeDamage(int damageAmount_)
     {
         healthSystem.TakeDamage(damageAmount_);
+    }
+
+    // return the current health
+    public float GetCurrentHealth()
+    {
+        return healthSystem.GetHealthPercentage();
     }
 
 

@@ -21,6 +21,10 @@ public class MoveAction : BaseAction
     [SerializeField]
     private int maxMoveDistance = 3;
 
+    // the action cost of the action
+    [SerializeField]
+    private int actionCost = 2;
+
 
     // two events that handle to unit walking animation upon start and stop moving
     public event EventHandler OnUnitStartMoving;
@@ -170,6 +174,33 @@ public class MoveAction : BaseAction
     public override string GetActionName()
     {
         return "Move";
+    }
+
+
+    // how much does this action cost
+    public override int GetActionPointsCost()
+    {
+        return actionCost;
+    }
+
+
+    // sign the enemy AI Action info for the AI usage
+    // enemy should move towards the player
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition_)
+    {
+
+        // find out if there are any valid target around the unit
+        int targetCount = unit.GetAttackAction().GetTargetCountAtThisPosition(gridPosition_);
+
+        // return the spin action AI action info
+        return new EnemyAIAction
+        {
+            // construction
+            gridPostion = gridPosition_,
+            // the action value of the move action depends on how many target around the specific grid
+            // so eneny will tend move to the positon with more enemy
+            actionValue = targetCount * 10,
+        };
     }
 
 }

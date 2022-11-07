@@ -27,6 +27,10 @@ public class AttackAction : BaseAction
     [SerializeField]
     private int damageAmount = 20;
 
+
+    // the action cost
+    [SerializeField]private int actionCost = 2;
+
     // used to store the target unit
     private UnitBasic targetUnit;
 
@@ -124,13 +128,31 @@ public class AttackAction : BaseAction
         return "Attack";
     }
 
+
+    public override int GetActionPointsCost()
+    {
+       return actionCost;
+    }
+
+
+
     public override List<GridPosition> GetValidGridPositionList()
+    {
+        // get the current unit grid position
+        GridPosition unitGridPosition = unit.GetUnitCurrentGridPosition();
+        // return the list with target position
+        return GetValidGridPositionList(unitGridPosition);
+
+    }
+
+
+    // logic to loop through all the grid positions aroud the given gridPos's attack range and try find the attackable unit
+    public List<GridPosition> GetValidGridPositionList(GridPosition unitGridPosition_)
     {
         // create a list
         List<GridPosition> validGridPositions = new List<GridPosition>();
 
-        // get the current unit grid position
-        GridPosition unitGridPosition = unit.GetUnitCurrentGridPosition();
+        
 
         // start search for all the grids around the unit, from left to right, bottom to top
         for (int x = -maxAttackDistance; x <= maxAttackDistance; x++)
@@ -140,7 +162,7 @@ public class AttackAction : BaseAction
                 // get the offset
                 GridPosition ValidPositionOffSet = new GridPosition(x, z);
                 // add it to the current unit position
-                GridPosition mergedGridPosition = unitGridPosition + ValidPositionOffSet;
+                GridPosition mergedGridPosition = unitGridPosition_ + ValidPositionOffSet;
                 // check if the merged grid position is valid (inside the map range)
                 if (!LevelGrid.Instance.IsValidGridPosition(mergedGridPosition))
                 {
@@ -234,6 +256,35 @@ public class AttackAction : BaseAction
     public int GetAttackRange()
     {
         return maxAttackDistance;
+    }
+
+
+    // sign the enemy AI Action info for the AI usage
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition_)
+    {
+        // the rank of an potential eney depends on how much hp target left
+        UnitBasic targetUnit = LevelGrid.Instance.GetUnitOnGrid(gridPosition_);
+
+        // return the spin action AI action info
+        return new EnemyAIAction
+        {
+            // construction
+            gridPostion = gridPosition_,
+            // attack has the highest action value 
+            actionValue = 100 + Mathf.RoundToInt((1- targetUnit.GetCurrentHealth()) * 100f),
+        };
+    }
+
+
+    // function used to return all the attackable targets
+    public int GetTargetCountAtThisPosition(GridPosition gridPos_)
+    {
+        
+        // find all the valid targets at the current grid pos
+        // the length of the list is the enemy count
+        return GetValidGridPositionList(gridPos_).Count;
+
+
     }
 
 }
