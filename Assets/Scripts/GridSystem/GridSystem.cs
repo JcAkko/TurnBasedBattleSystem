@@ -20,6 +20,8 @@ public class GridSystem<TGridObject>
 
 
     // constructor
+    // The func is a delegate function that intake the gridysystem, the gridposition and output a TGridObject with the two info provided, and
+    // the function name is called createGridObject
     public GridSystem(int xlength_, int zlength_, float cellSize_, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
     {
         // sign the with and height of the grid
@@ -65,7 +67,7 @@ public class GridSystem<TGridObject>
                 GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
                 
                 // sign the gridobject to the debugObject so it can visulize its grid positon on text 
-                gridDebugObject.SetGridObject(GetGridObject(gridPosition) as GridObject);
+                gridDebugObject.SetGridObject(GetGridObject(gridPosition));
             }
         }
     }

@@ -38,7 +38,7 @@ public class LevelGrid : MonoBehaviour
         gridSystem = new GridSystem<GridObject>(10, 10, 2.0f, 
             (GridSystem<GridObject> g_, GridPosition gridPosition_) => new GridObject(g_, gridPosition_));
         // populate the gridDebugObjects onto each grid
-        gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
+        //gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
     }
 
 
