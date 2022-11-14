@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridSystem
+// use generic to allow the grid system receive different gridObject type
+public class GridSystem<TGridObject>
 {
     // the length of the map on x axis
     private int xlength;
@@ -14,11 +16,11 @@ public class GridSystem
     private float cellSize;
 
     // 2d array used to store all the grid objects inside his gridsystem
-    private GridObject[,] gridObjectArray;
+    private TGridObject[,] gridObjectArray;
 
 
     // constructor
-    public GridSystem(int xlength_, int zlength_, float cellSize_)
+    public GridSystem(int xlength_, int zlength_, float cellSize_, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
     {
         // sign the with and height of the grid
         this.xlength = xlength_;
@@ -26,7 +28,7 @@ public class GridSystem
         this.cellSize = cellSize_;
 
         // create an array with the size xlength and zlength
-        gridObjectArray = new GridObject[xlength,zlength];
+        gridObjectArray = new TGridObject[xlength,zlength];
 
         // visual
         // populate all the grid objects on each grid center
@@ -37,7 +39,7 @@ public class GridSystem
                 // create the grid positon for this grid
                 GridPosition gridPosition = new GridPosition(x,z);
                 // create a new grid object on this position and sign this gridobject into the array
-                gridObjectArray[x, z] = new GridObject(this, gridPosition);
+                gridObjectArray[x, z] = createGridObject(this, gridPosition);
                 //Debug.DrawLine(GetWorldPosition(x,z), GetWorldPosition(x, z) + Vector3.right * 0.2f, Color.white, 1000);
             }
         }
@@ -63,7 +65,7 @@ public class GridSystem
                 GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
                 
                 // sign the gridobject to the debugObject so it can visulize its grid positon on text 
-                gridDebugObject.SetGridObject(GetGridObject(gridPosition));
+                gridDebugObject.SetGridObject(GetGridObject(gridPosition) as GridObject);
             }
         }
     }
@@ -71,7 +73,7 @@ public class GridSystem
 
 
     // this function is used to return the gridobject from the array based on its gridPosition
-    public GridObject GetGridObject(GridPosition gridPosition)
+    public TGridObject GetGridObject(GridPosition gridPosition)
     {
         return gridObjectArray[gridPosition.x, gridPosition.z];
     }

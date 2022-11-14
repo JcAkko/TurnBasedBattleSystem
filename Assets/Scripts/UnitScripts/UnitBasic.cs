@@ -15,6 +15,7 @@ public class UnitBasic : MonoBehaviour
     // list of actions that unit has
     private BaseAction[] baseActionArray;
 
+    /*
     // expose the moveaction linked to the unit
     private MoveAction moveAction;
 
@@ -23,6 +24,7 @@ public class UnitBasic : MonoBehaviour
 
     // expose the shoot action script attached to the unit
     private AttackAction attackAction;
+    */
 
     // get the health system from the unit
     private HealthSystem healthSystem;
@@ -42,12 +44,14 @@ public class UnitBasic : MonoBehaviour
 
     private void Awake()
     {
+        /*
         // find the moveaction attached to the unit
         moveAction = this.GetComponent<MoveAction>();
         // find the spinaction
         spinAction = this.GetComponent<SpinAction>();
         // find the attackAction
         attackAction = this.GetComponent<AttackAction>();
+        */
         // sign the health system
         healthSystem = this.GetComponent<HealthSystem>();
         // store all the actions into the array
@@ -82,6 +86,25 @@ public class UnitBasic : MonoBehaviour
     }
 
 
+    // function used to get all kinds of action from the unit
+    // used generic to receive the action type and constrain the type as the baseAction extensions
+    public T GetAction<T>() where T: BaseAction
+    {
+        // loop through all the baseActions attached to this unit
+        foreach (BaseAction baseAction_ in baseActionArray)
+        {
+            // if the action is the T type, return it
+            if (baseAction_ is T)
+            {
+                return (T)baseAction_;
+            }
+        }
+
+        // else return null
+        return null;
+    }
+
+
 
     // function used to update the unit gridPosition
     private void GridPostionUpdate()
@@ -102,7 +125,7 @@ public class UnitBasic : MonoBehaviour
         }
     }
 
-
+    /*
     // function used to expose the moveAction script
     public MoveAction GetMoveAction()
     {
@@ -122,7 +145,7 @@ public class UnitBasic : MonoBehaviour
     {
         return attackAction;
     }
-
+    */
 
     // functions used to expose the unit current grid position
     public GridPosition GetUnitCurrentGridPosition()

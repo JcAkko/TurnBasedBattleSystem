@@ -188,7 +188,7 @@ public class UnitActionSystem : MonoBehaviour
         // sign the selected unit
         selectedUnit = unit_;
         // sign the default action as the move action
-        SetSelectedAction(unit_.GetMoveAction());
+        SetSelectedAction(unit_.GetAction<MoveAction>());
 
         //OnSelectedShowVisual?.Invoke(this, EventArgs.Empty);
 

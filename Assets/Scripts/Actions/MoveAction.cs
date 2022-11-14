@@ -190,7 +190,7 @@ public class MoveAction : BaseAction
     {
 
         // find out if there are any valid target around the unit
-        int targetCount = unit.GetAttackAction().GetTargetCountAtThisPosition(gridPosition_);
+        int targetCount = unit.GetAction<AttackAction>().GetTargetCountAtThisPosition(gridPosition_);
 
         // return the spin action AI action info
         return new EnemyAIAction

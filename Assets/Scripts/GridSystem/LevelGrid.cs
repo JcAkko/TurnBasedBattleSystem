@@ -15,7 +15,7 @@ public class LevelGrid : MonoBehaviour
     private Transform gridDebugObjectPrefab;
 
     // refer to the grid system of the game
-    private GridSystem gridSystem;
+    private GridSystem<GridObject> gridSystem;
 
     // event fird on any unit grid pos change
     public event EventHandler OnAnyUnitGridPosChange;
@@ -35,7 +35,8 @@ public class LevelGrid : MonoBehaviour
         Instance = this;
 
         // create a new grid system for the game
-        gridSystem = new GridSystem(10, 10, 2.0f);
+        gridSystem = new GridSystem<GridObject>(10, 10, 2.0f, 
+            (GridSystem<GridObject> g_, GridPosition gridPosition_) => new GridObject(g_, gridPosition_));
         // populate the gridDebugObjects onto each grid
         gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
     }

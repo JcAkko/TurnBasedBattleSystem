@@ -5,7 +5,7 @@ using UnityEngine;
 public class GridObject
 {
     // the gridsystem this gridobjct belongs to
-    private GridSystem gridSystem;
+    private GridSystem<GridObject> gridSystem;
     // record the grid positon of this grid object
     private GridPosition gridPosition;
     // used to store all the units on this grid
@@ -13,7 +13,7 @@ public class GridObject
 
 
     // constructor
-    public GridObject(GridSystem gridSystem_, GridPosition gridPosition_)
+    public GridObject(GridSystem<GridObject> gridSystem_, GridPosition gridPosition_)
     {
         // sign the parameters
         this.gridSystem = gridSystem_;
