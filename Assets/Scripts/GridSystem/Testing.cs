@@ -8,16 +8,29 @@ public class Testing : MonoBehaviour
     private UnitBasic unit;
 
     
-    void Start()
-    {
-        
-    }
-
-
+  
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
+            // get the mouse grid position
+            GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseCast.GetMousePosition());
+
+            // calculate the path from zero to the mouse grid pos
+            GridPosition startPosition = new GridPosition(0,0);
+
+            List<GridPosition> gridPosList = PathFinding.Instance.FindPath(startPosition, mouseGridPosition);
+
+            for (int i = 0; i < gridPosList.Count - 1; i++)
+            {
+
+                Debug.DrawLine(
+                    LevelGrid.Instance.GetWorldPosition(gridPosList[i]),
+                    LevelGrid.Instance.GetWorldPosition(gridPosList[i + 1]),
+                    Color.red,
+                    10.0f
+                    ) ;
+            }
             
         }
       

@@ -5,6 +5,7 @@ using UnityEngine;
 
 
 // this script is used to manage the entire game grid system 
+// run before any other script in the editor
 public class LevelGrid : MonoBehaviour
 {
     // expose the class by make an static instance of the class
@@ -13,6 +14,15 @@ public class LevelGrid : MonoBehaviour
     // the prefab for the griddebugobject
     [SerializeField]
     private Transform gridDebugObjectPrefab;
+
+    // the length of the map on x axis
+    [SerializeField] private int xlength;
+
+    // the length of the map on z axis
+    [SerializeField] private int zlength;
+
+    // the size of each individual floor cell
+    [SerializeField] private float cellSize;
 
     // refer to the grid system of the game
     private GridSystem<GridObject> gridSystem;
@@ -35,10 +45,18 @@ public class LevelGrid : MonoBehaviour
         Instance = this;
 
         // create a new grid system for the game
-        gridSystem = new GridSystem<GridObject>(10, 10, 2.0f, 
+        gridSystem = new GridSystem<GridObject>(xlength, zlength, cellSize, 
             (GridSystem<GridObject> g_, GridPosition gridPosition_) => new GridObject(g_, gridPosition_));
         // populate the gridDebugObjects onto each grid
         //gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
+    }
+
+
+
+    private void Start()
+    {
+        // create the path finding grid system
+        PathFinding.Instance.PFGridSystemSetUp(xlength, zlength, cellSize);
     }
 
 
