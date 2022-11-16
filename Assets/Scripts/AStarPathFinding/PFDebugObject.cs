@@ -10,6 +10,9 @@ public class PFDebugObject : GridDebugObject
     [SerializeField] private TextMeshPro hCostText;
     [SerializeField] private TextMeshPro fCostText;
 
+    // test: iswalkable
+    [SerializeField] private SpriteRenderer isWalkableSprite;
+
     // the path Node that this debug obj belongs to
     private PathNode pathNode;
 
@@ -23,6 +26,9 @@ public class PFDebugObject : GridDebugObject
         gCostText.text = pathNode.GetGCost().ToString();
         hCostText.text = pathNode.GetHCost().ToString();
         fCostText.text = pathNode.GetFCost().ToString();
+
+        // ***test: if is walkable, mark green, not mark red
+        //isWalkableSprite.color = pathNode.IsWalkable() ? Color.green : Color.red;
     }
 
 

@@ -540,6 +540,9 @@ MonoBehaviour:
   maxAttackDistance: 1
   damageAmount: 20
   actionCost: 4
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &3746260564210989796
 MonoBehaviour:
   m_ObjectHideFlags: 0

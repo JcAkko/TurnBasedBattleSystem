@@ -41,6 +41,9 @@ public class AttackAction : BaseAction
     // two events that handle to unit slash animation
     public event EventHandler OnUnitStartSlashing;
 
+    // layer mask for the enemy
+    [SerializeField] private LayerMask obstacleLayerMask;
+
 
 
     private void Update()
@@ -198,11 +201,30 @@ public class AttackAction : BaseAction
                     continue;
                 }
 
+                // check if there is not obstacle between unit and the attack target
+                Vector3 unitWorldPos = LevelGrid.Instance.GetWorldPosition(unitGridPosition_);
+                Vector3 attackDir = (targetUnit.GetUnitWorldPosition() - unitWorldPos).normalized;
+
+                // the world position is at the bottom of the unit, so need to add shoulder height before ray cast
+                float unitShoulderHeight = 1.7f;
+                // ray cast to see if theres obstacle
+                if (Physics.Raycast(
+                    unitWorldPos + Vector3.up * unitShoulderHeight,
+                    attackDir,
+                    Vector3.Distance(unitWorldPos, targetUnit.GetUnitWorldPosition()),
+                    obstacleLayerMask
+                    ))
+                {
+                    // blocked by obstacle
+                    continue;
+                }
+
+                
+
                 // if the grid passed all the check, add it into the valid grid list
                 validGridPositions.Add(mergedGridPosition);
 
-                // test
-                //Debug.Log(mergedGridPosition);
+               
 
             }
 

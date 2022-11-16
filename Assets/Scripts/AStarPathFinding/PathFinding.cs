@@ -65,7 +65,7 @@ public class PathFinding : MonoBehaviour
             (GridSystem<PathNode> g_, GridPosition gridPosition_) => new PathNode(gridPosition_));
 
         // populate the gridDebugObjects onto each grid
-        pfGridSystem.CreateDebugObjects(gridDebugObjectPrefab);
+        //pfGridSystem.CreateDebugObjects(gridDebugObjectPrefab);
 
         // cycle through all the grid positions and location all the pathnodes that occupied by the obstacles
         // set them all as unwalkable
@@ -93,7 +93,8 @@ public class PathFinding : MonoBehaviour
 
 
     // function used to find the path from one node to another
-    public List<GridPosition> FindPath(GridPosition startPos_, GridPosition endPos_)
+    // this is the function that used by both ai and player to reach the target position
+    public List<GridPosition> FindPath(GridPosition startPos_, GridPosition endPos_, out int pathLength_)
     {
         // create open list and the close list
         List<PathNode> openList = new List<PathNode>();
@@ -139,6 +140,8 @@ public class PathFinding : MonoBehaviour
             // check if this node is the final node
             if (currentNode == endNode)
             {
+                // return the f cost of the end node
+                pathLength_ = endNode.GetFCost();
                 // reached the final node and return the calculated path
                 return CalculatePath(endNode);
             }
@@ -197,6 +200,7 @@ public class PathFinding : MonoBehaviour
 
 
         // no path has been found
+        pathLength_ = 0;
         return null;
 
     }
@@ -342,6 +346,35 @@ public class PathFinding : MonoBehaviour
         }
 
         return gridPositionList;
+    }
+
+
+    // function used to expose if a grid position is walkable
+    public bool IsWalkAblePosition(GridPosition gridPos_)
+    {
+        // get the path note obj from the gridsystem and check if its walkable
+        return pfGridSystem.GetGridObject(gridPos_).IsWalkable();
+    }
+
+    // function used to check is the target position has a path to reach it
+    public bool IsThereAPathToReachThePosition(GridPosition startGridPos_, GridPosition endGridPos_)
+    {
+        // use find path to check, if return null, then false
+        if (FindPath(startGridPos_, endGridPos_, out int pathLength_) == null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    // get the path length of the path finding result
+    public int GetPathLength(GridPosition startPos_, GridPosition endPos_)
+    {
+        FindPath(startPos_, endPos_, out int pathLength_);
+
+        return pathLength_;
     }
 
 

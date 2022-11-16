@@ -13,6 +13,7 @@ public class Testing : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
+            /*
             // get the mouse grid position
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseCast.GetMousePosition());
 
@@ -31,6 +32,7 @@ public class Testing : MonoBehaviour
                     10.0f
                     ) ;
             }
+            */
             
         }
       
