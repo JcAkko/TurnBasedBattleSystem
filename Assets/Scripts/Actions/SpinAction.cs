@@ -98,7 +98,7 @@ public class SpinAction : BaseAction
             // construction
             gridPostion = gridPosition_,
             // spin has the lowest action value 
-            actionValue = 0,
+            actionValue = 1,
         };
     }
 }

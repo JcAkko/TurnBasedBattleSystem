@@ -33,7 +33,12 @@ public class MoveAction : BaseAction
     public event EventHandler OnUnitStartMoving;
     public event EventHandler OnUnitStopMoving;
 
-   
+
+    // used to store the potentail target for enemy AI
+    private UnitBasic potentialtargetUnit = null;
+
+    // the potential enemy position that store into the AIGridObject
+    private GridPosition LastEnemyGridPosition;
 
 
 
@@ -113,11 +118,6 @@ public class MoveAction : BaseAction
             
         }
 
-        // use lerp for smooth transition
-        // use the code here if want move and rotation happend at the same time
-        //this.transform.forward = Vector3.Lerp(this.transform.forward, movingDirection, Time.deltaTime * rotationSpeed);
-
-
     }
 
 
@@ -125,6 +125,7 @@ public class MoveAction : BaseAction
     // this function will be public in order for unitActionSytem to call
     public override void TakeAction(GridPosition gridPosition_, Action OnMovementComplete_)
     {
+      
         // find the optimal path the reach the target position
         List<GridPosition> calculatedPathGridPositionList = PathFinding.Instance.FindPath(unit.GetUnitCurrentGridPosition(), gridPosition_, out int pathLength_);
 
@@ -240,17 +241,145 @@ public class MoveAction : BaseAction
     {
 
         // find out if there are any valid target around the unit
-        int targetCount = unit.GetAction<AttackAction>().GetTargetCountAtThisPosition(gridPosition_);
+        //int targetCount = unit.GetAction<AttackAction>().GetTargetCountAtThisPosition(gridPosition_);
+
+        // find out if any player unit is within the move range
+        List<UnitBasic> playerList = UnitManager.Instance.GetPlayerUnitList();
+
+        
+        // used to store the previous range
+        int previousDistance = 0;
+        // the index for action value
+        int actionValueIndex = 0;
+
+        foreach (UnitBasic playerUnit_ in playerList)
+        {
+            int distanceToPlayer = PathFinding.Instance.GetPathLength(unit.GetUnitCurrentGridPosition(), playerUnit_.GetUnitCurrentGridPosition());
+            
+
+            //Debug.Log("DicToP: " + distanceToPlayer + "MovD: " +maxMoveDistance * 10);
+            // if the unit is within the move range
+            if (distanceToPlayer <= maxMoveDistance * 10)
+            {
+                if (potentialtargetUnit == null)
+                {
+                    potentialtargetUnit = playerUnit_;
+                    previousDistance = distanceToPlayer;
+                }
+                else
+                {
+                    // if found one that is closer
+                    if (distanceToPlayer < previousDistance)
+                    {
+                        potentialtargetUnit = playerUnit_;
+                        previousDistance = distanceToPlayer;
+                    }
+                }
+                
+            }
+        }
+
+        
+        if (potentialtargetUnit != null)
+        {
+            actionValueIndex = 20;
+            LastEnemyGridPosition = FindAttackPosition();
+        }
+        else
+        {
+            actionValueIndex = 0;
+            LastEnemyGridPosition = gridPosition_;
+        }
+
+
+
 
         // return the spin action AI action info
         return new EnemyAIAction
         {
             // construction
-            gridPostion = gridPosition_,
+            //gridPostion = gridPosition_,
+            gridPostion = LastEnemyGridPosition,
             // the action value of the move action depends on how many target around the specific grid
             // so eneny will tend move to the positon with more enemy
-            actionValue = targetCount * 10,
+            //actionValue = targetCount * 10,
+            actionValue = 0 + actionValueIndex,
         };
+    }
+
+
+    // function used to find the valid attack position
+    private GridPosition FindAttackPosition()
+    {
+        // optimal gridpos
+        GridPosition optimalGridPosition = new GridPosition();
+
+        if (potentialtargetUnit != null)
+        {
+            // list to hold all the potential positions that can make enemy attack player
+            List<GridPosition> targetPositions = new List<GridPosition>();
+
+            
+
+            // check the attack range
+            int attackRange = unit.GetComponent<AttackAction>().GetAttackRange();
+
+            // calculate the grid positions
+            GridPosition Left = potentialtargetUnit.GetUnitCurrentGridPosition() + new GridPosition(-attackRange,0);
+            GridPosition Right = potentialtargetUnit.GetUnitCurrentGridPosition() + new GridPosition(attackRange, 0);
+            GridPosition Top = potentialtargetUnit.GetUnitCurrentGridPosition() + new GridPosition(0, attackRange);
+            GridPosition Bot = potentialtargetUnit.GetUnitCurrentGridPosition() + new GridPosition(0, -attackRange);
+
+            // add them to the list
+            targetPositions.Add(Left);
+            targetPositions.Add(Right);
+            targetPositions.Add(Top);
+            targetPositions.Add(Left);
+
+            // remove the invalid ones
+            foreach (GridPosition gridPos_ in targetPositions)
+            {
+                // if not valid, remove
+                if (!LevelGrid.Instance.IsValidGridPosition(gridPos_))
+                {
+                    targetPositions.Remove(gridPos_);
+                }
+            }
+
+            // float to hold the distance between player and enemy
+            float distance = 0;
+
+            // find the grid position that close the the target
+            foreach (GridPosition gridPos_ in targetPositions)
+            {
+                // calculate the distance between enemy and the target pos
+                float currentDistance = Mathf.Abs(Vector3.Distance(unit.GetUnitWorldPosition(), LevelGrid.Instance.GetWorldPosition(gridPos_)));
+                
+                if (distance == 0)
+                {
+                    distance = currentDistance;
+                    optimalGridPosition = gridPos_;
+                }
+                else
+                {
+                    // repalce the distance if a closer positon has been found
+                    if (currentDistance <= distance)
+                    {
+                        distance = currentDistance;
+                        optimalGridPosition = gridPos_;
+                    }
+                }
+            }
+
+            
+            return optimalGridPosition;
+           
+
+        }
+
+
+        return potentialtargetUnit.GetUnitCurrentGridPosition();
+        
     }
 
 }

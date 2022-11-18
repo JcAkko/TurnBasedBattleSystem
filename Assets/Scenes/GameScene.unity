@@ -3147,6 +3147,11 @@ PrefabInstance:
       propertyPath: health
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 5145862111471712449, guid: 53e304bc52e77b643ac4a5ca230cfc18,
+        type: 3}
+      propertyPath: actionCost
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8127480098153713506, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}
       propertyPath: m_Name
@@ -4851,6 +4856,11 @@ PrefabInstance:
         type: 3}
       propertyPath: health
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5145862111471712449, guid: 53e304bc52e77b643ac4a5ca230cfc18,
+        type: 3}
+      propertyPath: actionCost
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8127480098153713506, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}
@@ -6741,6 +6751,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Unit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639306477540181130, guid: b4f8fc7cd435d144cb2090d00beac4d0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4639306477540181131, guid: b4f8fc7cd435d144cb2090d00beac4d0,
         type: 3}
