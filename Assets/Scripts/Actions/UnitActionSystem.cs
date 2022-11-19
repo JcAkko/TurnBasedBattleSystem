@@ -122,6 +122,9 @@ public class UnitActionSystem : MonoBehaviour
                     selectedAction.TakeAction(mouseGridPosition, EndExcuteAction);
 
                     // let unit consume its action points
+                    selectedUnit.SpendCost(selectedAction);
+
+                    // fire the action start event
                     OnActionStarted?.Invoke(this, EventArgs.Empty);
 
                 }

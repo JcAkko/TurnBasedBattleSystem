@@ -14,9 +14,11 @@ public class TurnSystem : MonoBehaviour
     // is the current turn player turn
     private bool isPlayerTurn = true;
 
+    // timer for player turn cool down
+    private float PlayerCoolDownTimer;
+
     // event called when turn number changed
     public event EventHandler OnTurnChanged;
-
 
     // event called when enemy count finished
     public event EventHandler OnEnemyCountDownFinished;
@@ -35,6 +37,24 @@ public class TurnSystem : MonoBehaviour
         Instance = this;
     }
 
+
+
+    private void Update()
+    {
+        
+        if (isPlayerTurn == false && PlayerCoolDownTimer > 0)
+        {
+            PlayerCoolDownTimer -= Time.deltaTime;
+        }
+        else if (isPlayerTurn == false)
+        {
+            isPlayerTurn = true;
+            // fire the on turn change event
+            OnTurnChanged?.Invoke(this, EventArgs.Empty);
+        }
+        
+    }
+
     // function used to expose turn number
     public int GetTurnNumber()
     {
@@ -51,6 +71,13 @@ public class TurnSystem : MonoBehaviour
         isPlayerTurn = !isPlayerTurn;
         // fire the on turn change event
         OnTurnChanged?.Invoke(this, EventArgs.Empty);
+
+        // if player turn ends, reset timer
+        if (isPlayerTurn == false)
+        {
+            Debug.Log("Player cool down start");
+            PlayerCoolDownTimer = 5.0f;
+        }
     }
 
 

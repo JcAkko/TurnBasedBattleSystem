@@ -46,13 +46,13 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        /*
+        
         // ***if the current turn is player turn, do nothing
         if (TurnSystem.Instance.IsPlayerTurn())
         {
             return;
         }
-        */
+        
 
 
         if (Input.GetKeyDown(KeyCode.H))
@@ -75,7 +75,7 @@ public class EnemyAI : MonoBehaviour
                 {
 
                     gapTimer -= Time.deltaTime;
-                    Debug.Log("Enemy Cool down" + gapTimer);
+                    //Debug.Log("Enemy Cool down" + gapTimer);
                 }
                 else
                 {
@@ -106,7 +106,7 @@ public class EnemyAI : MonoBehaviour
                     else
                     {
                         // end turn if no more enemy can take anymore actions
-                        TurnSystem.Instance.NextTurn();
+                        //TurnSystem.Instance.NextTurn();
                         // *** reset the state back to waiting
                         currentState = State.waitingForEnemyPhase;
                         // reset gap timer

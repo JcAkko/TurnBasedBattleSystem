@@ -67,7 +67,7 @@ public class UnitBasic : MonoBehaviour
         LevelGrid.Instance.SetUnitAtGridPosition(currentGridPostion, this);
 
         // listen to the turn change event to refresh the action point
-        //TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
 
         // *** listen to the turn system on enemy count down finished
         TurnSystem.Instance.OnEnemyCountDownFinished += TurnSystem_OnEnmyCountDownFinished;
@@ -226,6 +226,7 @@ public class UnitBasic : MonoBehaviour
     // recharge the action point upon turn changed
     private void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
     {
+        /*
         // only recharge the AP if: unit is enemy and it is the enemy turn or unit is player and its the unit turn
         if ((IsUnitEnemy() && !TurnSystem.Instance.IsPlayerTurn()) || (!IsUnitEnemy() && TurnSystem.Instance.IsPlayerTurn()))
         {
@@ -235,14 +236,25 @@ public class UnitBasic : MonoBehaviour
             OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
 
         }
-        
+        */
+
+        // only recharge the AP if: unit is player and its the unit turn
+        if ((!IsUnitEnemy() && TurnSystem.Instance.IsPlayerTurn()))
+        {
+            // set the action point back to max
+            actionPoints = maxActionPoint;
+            // on points change
+            OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
+
+        }
+
     }
 
 
     // **** used for individual timeline system, recahrge the action ponints for the enemy
     private void TurnSystem_OnEnmyCountDownFinished(object sender, EventArgs empt)
     {
-        if (IsUnitEnemy())
+        if (IsUnitEnemy() == true)
         {
             // set the action point back to max
             actionPoints = maxActionPoint;
