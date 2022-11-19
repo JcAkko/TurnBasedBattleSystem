@@ -254,9 +254,9 @@ public class MoveAction : BaseAction
 
         foreach (UnitBasic playerUnit_ in playerList)
         {
+            // calculate the diatance
             int distanceToPlayer = PathFinding.Instance.GetPathLength(unit.GetUnitCurrentGridPosition(), playerUnit_.GetUnitCurrentGridPosition());
-            
-
+         
             //Debug.Log("DicToP: " + distanceToPlayer + "MovD: " +maxMoveDistance * 10);
             // if the unit is within the move range
             if (distanceToPlayer <= maxMoveDistance * 10)
@@ -294,7 +294,7 @@ public class MoveAction : BaseAction
 
 
 
-        // return the spin action AI action info
+        // return the enemy AI action info
         return new EnemyAIAction
         {
             // construction

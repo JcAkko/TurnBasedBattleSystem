@@ -111,14 +111,15 @@ public abstract class BaseAction : MonoBehaviour
         // list to hold all the AIActions
         List<EnemyAIAction> enemyAIActionList = new List<EnemyAIAction>();
 
-        // list with all the movablle grid positions
+        // list that holds all the valid gridpositions for this action
         List<GridPosition> validActionGridPositionList = GetValidGridPositionList();
 
         // loop through all the valid grid positions and compare their action value
+        // there will be an enemyAiAction object on each of the gridPosition
         foreach (GridPosition validGridPos_ in validActionGridPositionList)
         {
             // check the action Value for each grid
-             EnemyAIAction enemyAIAction = GetEnemyAIAction(validGridPos_);
+            EnemyAIAction enemyAIAction = GetEnemyAIAction(validGridPos_);
             // add it into the list
             enemyAIActionList.Add(enemyAIAction);
         }

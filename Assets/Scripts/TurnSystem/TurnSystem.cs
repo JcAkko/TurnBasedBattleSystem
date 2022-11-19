@@ -17,6 +17,10 @@ public class TurnSystem : MonoBehaviour
     // event called when turn number changed
     public event EventHandler OnTurnChanged;
 
+
+    // event called when enemy count finished
+    public event EventHandler OnEnemyCountDownFinished;
+
     private void Awake()
     {
         // check if there's multiple instance for this class, if so destory them and only leave one exist
@@ -54,5 +58,12 @@ public class TurnSystem : MonoBehaviour
     public bool IsPlayerTurn()
     {
         return isPlayerTurn;
+    }
+
+
+    // function used to reset the enemy action points upon count down finished
+    public void EnemyCountDownFinished()
+    {
+        OnEnemyCountDownFinished?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -67,7 +67,10 @@ public class UnitBasic : MonoBehaviour
         LevelGrid.Instance.SetUnitAtGridPosition(currentGridPostion, this);
 
         // listen to the turn change event to refresh the action point
-        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+        //TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+
+        // *** listen to the turn system on enemy count down finished
+        TurnSystem.Instance.OnEnemyCountDownFinished += TurnSystem_OnEnmyCountDownFinished;
 
         // subscribe to the health system on unit death
         healthSystem.onUnitDeath += healthSystem_OnUnitDeath;
@@ -233,6 +236,19 @@ public class UnitBasic : MonoBehaviour
 
         }
         
+    }
+
+
+    // **** used for individual timeline system, recahrge the action ponints for the enemy
+    private void TurnSystem_OnEnmyCountDownFinished(object sender, EventArgs empt)
+    {
+        if (IsUnitEnemy())
+        {
+            // set the action point back to max
+            actionPoints = maxActionPoint;
+            // on points change
+            OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
+        }
     }
 
 

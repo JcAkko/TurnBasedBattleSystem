@@ -22,10 +22,14 @@ public class EnemyAI : MonoBehaviour
     private State currentState;
 
     // timer for all state
-    private float stateTimer;
+    //private float stateTimer;
 
     // for timeer for takingAction state
     private float timer;
+
+
+    // **** timer for enemy turn count down
+    private float gapTimer;
 
 
     private void Awake()
@@ -37,26 +41,52 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         // subscribe to the on turnchange event
-        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+        //TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
     }
 
     private void Update()
     {
+        /*
         // ***if the current turn is player turn, do nothing
         if (TurnSystem.Instance.IsPlayerTurn())
         {
             return;
         }
+        */
 
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            // enemy turn start
+            currentState = State.TakingAction;
+            timer = 2.0f;
+            gapTimer = 5.0f;
+        }
 
         // if enemy turn, switch between different states
         // decrement the state timer
-        stateTimer -= Time.deltaTime;
+        //stateTimer -= Time.deltaTime;
 
         // else, start state turn and start timer
         switch (currentState)
         {
             case State.waitingForEnemyPhase:
+                if (gapTimer > 0)
+                {
+
+                    gapTimer -= Time.deltaTime;
+                    Debug.Log("Enemy Cool down" + gapTimer);
+                }
+                else
+                {
+                    Debug.Log("Enemy start action");
+                    // reset the action points
+                    TurnSystem.Instance.EnemyCountDownFinished();
+                    // enemy turn start
+                    currentState = State.TakingAction;
+                    timer = 2.0f;
+                    
+                }
                 break;
             case State.TakingAction:
                 // test
@@ -77,6 +107,10 @@ public class EnemyAI : MonoBehaviour
                     {
                         // end turn if no more enemy can take anymore actions
                         TurnSystem.Instance.NextTurn();
+                        // *** reset the state back to waiting
+                        currentState = State.waitingForEnemyPhase;
+                        // reset gap timer
+                        gapTimer = 5.0f;
                     }
                     
                   
