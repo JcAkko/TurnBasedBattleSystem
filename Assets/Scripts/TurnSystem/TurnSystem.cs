@@ -14,11 +14,14 @@ public class TurnSystem : MonoBehaviour
     // is the current turn player turn
     private bool isPlayerTurn = true;
 
-    // timer for player turn cool down
+    // timer for player turn cool down, used to double control system
     private float PlayerCoolDownTimer;
 
-    // event called when turn number changed
+    // event called when turn number changed, used for both player
     public event EventHandler OnTurnChanged;
+
+    // *** event called when individual unit count down finished
+    public event EventHandler OnIndividualUnitTurnChanged;
 
     // event called when enemy count finished
     public event EventHandler OnEnemyCountDownFinished;
@@ -41,8 +44,8 @@ public class TurnSystem : MonoBehaviour
 
     private void Update()
     {
-        
-        if (isPlayerTurn == false && PlayerCoolDownTimer > 0)
+        // used for double unit system timer
+        if (isPlayerTurn == false && PlayerCoolDownTimer > 0.2f)
         {
             PlayerCoolDownTimer -= Time.deltaTime;
         }
@@ -52,7 +55,9 @@ public class TurnSystem : MonoBehaviour
             // fire the on turn change event
             OnTurnChanged?.Invoke(this, EventArgs.Empty);
         }
-        
+
+
+   
     }
 
     // function used to expose turn number
@@ -81,6 +86,31 @@ public class TurnSystem : MonoBehaviour
     }
 
 
+    // *** function used for individual unit recharge for next turn
+    public void UnitRechargeForNextTurn()
+    {
+        // find the current selected unit
+        UnitBasic rechargeUnit_ = UnitActionSystem.Instance.GetSelectedUnit();
+
+        // try get the unit turn timer component
+        rechargeUnit_.TryGetComponent<UnitTurnTimer>(out UnitTurnTimer unitTurnTimer);
+
+        // switch the unit turn state as active or inactive
+        unitTurnTimer.SwithIsMyTurnState();
+
+        // fire the on turn change event to hide or show the UI
+        OnIndividualUnitTurnChanged?.Invoke(this, EventArgs.Empty);
+
+        // if unit turn ends, reset timer
+        if (unitTurnTimer.IsMyTurn() == false)
+        {
+            Debug.Log("Player: " + rechargeUnit_ + " cool down start");
+            unitTurnTimer.ResetTurnTimer();
+            
+        }
+    }
+
+
     // function used to expose if the current turn is player turn
     public bool IsPlayerTurn()
     {
@@ -92,5 +122,12 @@ public class TurnSystem : MonoBehaviour
     public void EnemyCountDownFinished()
     {
         OnEnemyCountDownFinished?.Invoke(this, EventArgs.Empty);
+    }
+
+
+    // function called when the indie unit count down finisehd to update the UI info
+    public void IndieUnitCountDownFinished()
+    {
+        OnIndividualUnitTurnChanged?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -297,4 +297,15 @@ public class UnitBasic : MonoBehaviour
     }
 
 
+    // *** used to recharge the action point for the individual unit
+    public void RechargeUnitActionPoint()
+    {
+        // set the action point back to max
+        actionPoints = maxActionPoint;
+        // on points change
+        OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
+    }
+
+
+   
 }

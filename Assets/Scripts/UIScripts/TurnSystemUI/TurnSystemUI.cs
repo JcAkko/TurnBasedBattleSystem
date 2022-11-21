@@ -20,6 +20,14 @@ public class TurnSystemUI : MonoBehaviour
     [SerializeField]
     private GameObject EnemyTurnUI;
 
+    // the unit cool down UI
+    [SerializeField] private GameObject UnitCoolDownUI;
+
+
+    // *** the individual enenmy end turn button
+    [SerializeField] private Button IndieEndTurnButton;
+
+
 
     private void Start()
     {
@@ -29,10 +37,21 @@ public class TurnSystemUI : MonoBehaviour
             TurnSystem.Instance.NextTurn();
         });
 
+        // *** the individual end turn
+        IndieEndTurnButton.onClick.AddListener(() =>
+        {
+            TurnSystem.Instance.UnitRechargeForNextTurn();
+        });
+
 
         // subscribe to the turn change event
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
 
+        //subscribe to the Unit turn down finished event
+        TurnSystem.Instance.OnIndividualUnitTurnChanged += TurnSystem_OnIndieTurnChanged;
+
+        //subscribe to the on unit selection change event
+        UnitActionSystem.Instance.OnSelectedUnitChange += UnitActionSystem_OnSelectedUnitChanged;
 
         // update the turn number
         UpdateTurnNumber();
@@ -58,10 +77,34 @@ public class TurnSystemUI : MonoBehaviour
     }
 
 
+    private void TurnSystem_OnIndieTurnChanged(object sender, EventArgs empty)
+    {
+        UpdateTurnNumber();
+        UpdateCoolDownUI();
+        // show hide the button
+        //HideEndTurnButtonUponEnemyPhase();
+    }
+
+
+    // response to the unit selection changed
+    private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs empty)
+    {
+        // show or hide the charging UI depends on the active state of the current selected unit
+        UpdateCoolDownUI();
+    }
+
+
     // update the enemy turn UI is its the enemy turn
     private void UpdateEnemyTurnUI()
     {
         EnemyTurnUI.SetActive(!TurnSystem.Instance.IsPlayerTurn());
+    }
+
+
+    // *** update the player cool down UI is unit is in cool down
+    private void UpdateCoolDownUI()
+    {
+        UnitCoolDownUI.SetActive(!UnitActionSystem.Instance.IsUnitIndividualTurn());
     }
 
     // function used to hide the end turn button when its enemy turn

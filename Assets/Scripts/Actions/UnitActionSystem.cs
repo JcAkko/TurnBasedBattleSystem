@@ -249,6 +249,9 @@ public class UnitActionSystem : MonoBehaviour
         OnActionBusyChange?.Invoke(this, isExcutingAction);
     }
 
-
-
+    // ***return if its the unit turn, used for individual turn system
+    public bool IsUnitIndividualTurn()
+    {
+        return GetSelectedUnit().GetComponent<UnitTurnTimer>().IsMyTurn();
+    }
 }
