@@ -8,6 +8,9 @@ public class UnitBasic : MonoBehaviour
     // used to identify if the unit is an enemy or player unit
     [SerializeField]
     private bool isEnemy;
+
+    // name of the unit
+    [SerializeField] string unitName;
     
     // use to store the current grid positon of the unit
     private GridPosition currentGridPostion;
@@ -304,6 +307,13 @@ public class UnitBasic : MonoBehaviour
         actionPoints = maxActionPoint;
         // on points change
         OnAnyActionPointChange?.Invoke(this, EventArgs.Empty);
+    }
+
+
+    // used to return name
+    public string GetUnitName()
+    {
+        return unitName;
     }
 
 

@@ -17,6 +17,9 @@ public class IndieEnemyAI : MonoBehaviour
     // the timer to count gap time
     private float gapTimer = 0;
 
+    // refer to the character Tag UI
+    private GameObject characterTagUI;
+
     // state machine for AI
     private enum State
     {
@@ -39,6 +42,15 @@ public class IndieEnemyAI : MonoBehaviour
     private float timer;
 
 
+    // variables used for unit timeline Tag
+    private float YPos;
+    private float XStart;
+    private float XEnd;
+    private Vector3 startPos;
+    private Vector3 endPos;
+
+
+
     private void Awake()
     {
         // sign the default state as waiting
@@ -52,6 +64,14 @@ public class IndieEnemyAI : MonoBehaviour
     {
         // subscribe to the on turnchange event
         //TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+
+        // get the positions used for update the character Tag UI
+        YPos = TimelineUI.Instance.GetSliderYValue();
+        XStart = TimelineUI.Instance.GetMinSliderValue();
+        XEnd = TimelineUI.Instance.GetMaxSliderValue();
+        // calcualte the start and end position of the unit Tag UI
+        startPos = new Vector3(XStart, YPos, 0);
+        endPos = new Vector3(XEnd, YPos, 0);
     }
 
     private void Update()
@@ -63,6 +83,10 @@ public class IndieEnemyAI : MonoBehaviour
             return;
         }
         */
+
+
+        // update chracter tag UI
+        UpdateCharacterTag();
 
 
         if (Input.GetKeyDown(KeyCode.H))
@@ -233,6 +257,29 @@ public class IndieEnemyAI : MonoBehaviour
             timer = 2.0f;
         }
 
+    }
+
+
+    // function used to set the character UI
+    public void SetCharacterTagUI(GameObject TagUI)
+    {
+        characterTagUI = TagUI;
+    }
+
+
+    // function used to update the CharacterTag if there is one
+    private void UpdateCharacterTag()
+    {
+        if (characterTagUI == null)
+        {
+            return;
+        }
+
+        //calculate the position ratio
+        float ratio = gapTimer / MaxGapTime;
+
+        // update the slider
+        characterTagUI.transform.localPosition = Vector3.Lerp(endPos, startPos, ratio);
     }
 
 
