@@ -880,7 +880,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.21258415, y: -0.67439455, z: 0.21258415, w: 0.67439455}
+  m_LocalRotation: {x: 0.21258417, y: -0.67439455, z: 0.21258414, w: 0.67439455}
   m_LocalPosition: {x: 11.500005, y: 7, z: 4.250018}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3542,7 +3542,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888330185}
-  m_LocalRotation: {x: 0.21258415, y: -0.67439455, z: 0.21258415, w: 0.67439455}
+  m_LocalRotation: {x: 0.21258417, y: -0.67439455, z: 0.21258414, w: 0.67439455}
   m_LocalPosition: {x: 11.500005, y: 7, z: 4.250018}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3836,6 +3836,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 305224652008046756, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}
+      propertyPath: actionCost
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 305224652008046756, guid: 53e304bc52e77b643ac4a5ca230cfc18,
+        type: 3}
       propertyPath: maxMoveDistance
       value: 4
       objectReference: {fileID: 0}
@@ -3847,7 +3852,7 @@ PrefabInstance:
     - target: {fileID: 5145862111471712449, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}
       propertyPath: actionCost
-      value: 10
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8127480098153713506, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}
@@ -5994,6 +5999,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 305224652008046756, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}
+      propertyPath: actionCost
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 305224652008046756, guid: 53e304bc52e77b643ac4a5ca230cfc18,
+        type: 3}
       propertyPath: maxMoveDistance
       value: 4
       objectReference: {fileID: 0}
@@ -6005,7 +6015,7 @@ PrefabInstance:
     - target: {fileID: 5145862111471712449, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}
       propertyPath: actionCost
-      value: 10
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8127480098153713506, guid: 53e304bc52e77b643ac4a5ca230cfc18,
         type: 3}

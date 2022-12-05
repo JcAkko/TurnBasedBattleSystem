@@ -110,4 +110,11 @@ public class PathNode
     }
 
 
+    // used to check if one position is already occupied by any unit
+    public bool IsOccupiedByAnyUnit()
+    {
+        return LevelGrid.Instance.IsGridPostionOccupied(gridPosition);
+    }
+
+
 }

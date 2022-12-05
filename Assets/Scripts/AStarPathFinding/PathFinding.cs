@@ -167,6 +167,14 @@ public class PathFinding : MonoBehaviour
                     continue;
                 }
 
+                
+                // if occupied by any unit, skip
+                if (neighbourNode.IsOccupiedByAnyUnit())
+                {
+                    // add to the close list
+                    closeList.Add(neighbourNode);
+                    continue;
+                }
 
                 // else, calculate the g cost of this neighbourNode
                 int tentativeGCost = currentNode.GetGCost() + CalculateDistance(currentNode.GetGridPosition(), neighbourNode.GetGridPosition());
@@ -202,6 +210,122 @@ public class PathFinding : MonoBehaviour
         // no path has been found
         pathLength_ = 0;
         return null;
+
+    }
+
+
+
+    // this funciton only returns the length of the path and ignore the grid with unit occupied
+    public int GetPathLength(GridPosition startPos_, GridPosition endPos_)
+    {
+        // length of the path
+        int pathLength_;
+
+        // create open list and the close list
+        List<PathNode> openList = new List<PathNode>();
+        List<PathNode> closeList = new List<PathNode>();
+
+        // find the start node
+        PathNode startNode = pfGridSystem.GetGridObject(startPos_);
+        // find the end node
+        PathNode endNode = pfGridSystem.GetGridObject(endPos_);
+
+        // add start node into the open list
+        openList.Add(startNode);
+
+        // cycle through all the nodes inside the system and reset their state
+        for (int x = 0; x < pfGridSystem.GetGridSystemWidth(); x++)
+        {
+            for (int z = 0; z < pfGridSystem.GetGridSystemHeight(); z++)
+            {
+                GridPosition gridPos = new GridPosition(x, z);
+                // get the path node object at this grid position
+                PathNode pathNode = pfGridSystem.GetGridObject(gridPos);
+
+                // reset the gcost and Hcost for the node
+                pathNode.SetGCost(int.MaxValue);
+                pathNode.SetHCost(0);
+                pathNode.CalculateFCost();
+                // reset the previous node history
+                pathNode.ResetCameFromPathNode();
+            }
+        }
+
+        // calculate the G H and F cost for the start node
+        startNode.SetGCost(0);
+        startNode.SetHCost(CalculateDistance(startPos_, endPos_));
+        startNode.CalculateFCost();
+
+        // while there is still node inside the open list, calculate all of them
+        while (openList.Count > 0)
+        {
+            // alway grab to one in the openlist with lowest F cost
+            PathNode currentNode = GetLowestFCostNodeFromList(openList);
+
+            // check if this node is the final node
+            if (currentNode == endNode)
+            {
+                // return the f cost of the end node
+                pathLength_ = endNode.GetFCost();
+                // reached the final node and return the calculated path
+                return pathLength_;
+            }
+
+            // remove the node from the open list and add it into the clostlist
+            openList.Remove(currentNode);
+            closeList.Add(currentNode);
+
+            // loop through all the neighbour nodes of the currentNode
+            foreach (PathNode neighbourNode in GetNeighbourNodeList(currentNode))
+            {
+                // if this node is inside close list, skip
+                if (closeList.Contains(neighbourNode))
+                {
+                    continue;
+                }
+
+                // if the node is not walkable, skip
+                if (!neighbourNode.IsWalkable())
+                {
+                    // add to close list
+                    closeList.Add(neighbourNode);
+                    continue;
+                }
+
+                // else, calculate the g cost of this neighbourNode
+                int tentativeGCost = currentNode.GetGCost() + CalculateDistance(currentNode.GetGridPosition(), neighbourNode.GetGridPosition());
+
+                // if the g cost of the tentativeG is smaller than its original G cost, the current result is a better way
+                // the default initial gcost is int max
+                if (tentativeGCost < neighbourNode.GetGCost())
+                {
+
+                    // remember its previouse valid node
+                    neighbourNode.SetCameFromPathNode(currentNode);
+                    // set the g cost of this neighbour node
+                    neighbourNode.SetGCost(tentativeGCost);
+                    // set the h cost of the neighbour node
+                    neighbourNode.SetHCost(CalculateDistance(neighbourNode.GetGridPosition(), endPos_));
+                    // calculate the f cost
+                    neighbourNode.CalculateFCost();
+
+                    // add the neighbour node into the open list
+                    if (!openList.Contains(neighbourNode))
+                    {
+                        openList.Add(neighbourNode);
+                    }
+
+
+                }
+            }
+
+
+        }
+
+
+        // no path has been found
+        pathLength_ = 0;
+        return pathLength_;
 
     }
 
@@ -368,7 +492,7 @@ public class PathFinding : MonoBehaviour
         return true;
     }
 
-
+    /*
     // get the path length of the path finding result
     public int GetPathLength(GridPosition startPos_, GridPosition endPos_)
     {
@@ -376,6 +500,6 @@ public class PathFinding : MonoBehaviour
 
         return pathLength_;
     }
-
+    */
 
 }

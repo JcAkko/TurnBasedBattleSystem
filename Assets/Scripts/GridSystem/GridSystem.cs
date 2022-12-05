@@ -15,7 +15,7 @@ public class GridSystem<TGridObject>
     // the size of each individual floor cell
     private float cellSize;
 
-    // 2d array used to store all the grid objects inside his gridsystem
+    // 2d array used to store all the grid objects inside this gridsystem
     private TGridObject[,] gridObjectArray;
 
 

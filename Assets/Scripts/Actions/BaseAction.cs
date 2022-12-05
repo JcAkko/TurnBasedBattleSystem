@@ -18,7 +18,7 @@ public abstract class BaseAction : MonoBehaviour
     protected UnitBasic unit;
 
 
-    // delegate used to represent a function that might be called when spin action finished
+    // delegate used to represent a function that might be called when an action finished
     // use using System and call Action<> instead of creat one 
     // Action<> returns void while Func<> returns the type inside <>
     protected Action onActionComplete;
