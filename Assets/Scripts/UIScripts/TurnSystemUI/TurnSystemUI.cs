@@ -58,7 +58,7 @@ public class TurnSystemUI : MonoBehaviour
 
         // update the enemy turn UI and the end turn button UI
         UpdateEnemyTurnUI();
-        HideEndTurnButtonUponEnemyPhase();
+        //HideEndTurnButtonUponEnemyPhase();
     }
 
 

@@ -29,7 +29,7 @@ public class TimelineUI : MonoBehaviour
     // the start point of the slider
     [SerializeField] float sliderStartPoint;
     // the end point of the slider
-    [SerializeField] float sliderEndPoint;
+    //[SerializeField] float sliderEndPoint;
     // the Y value of the slider
     float sliderYValue = 11;
 
@@ -105,12 +105,13 @@ public class TimelineUI : MonoBehaviour
         }
     }
 
-
+    /*
     // function used to expose the max value for the sldier
     public float GetMaxSliderValue()
     {
         return sliderEndPoint;
     }
+    */
 
     // function used to expose the min value for the sldier
     public float GetMinSliderValue()

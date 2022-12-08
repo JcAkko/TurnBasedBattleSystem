@@ -13,8 +13,8 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         // subscribe to the action start event and end event
-        BaseAction.OnAnyActionStarted += baseAction_OnAnyActionStarted;
-        BaseAction.onAnyActionCompleted += baseAction_OnAnyActionCompleted;
+        //BaseAction.OnAnyActionStarted += baseAction_OnAnyActionStarted;
+        //BaseAction.onAnyActionCompleted += baseAction_OnAnyActionCompleted;
 
         // hide the action cam on start
         SetActionCamInactive();

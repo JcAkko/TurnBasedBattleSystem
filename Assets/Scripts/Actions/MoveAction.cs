@@ -257,7 +257,7 @@ public class MoveAction : BaseAction
             // calculate the diatance
             int distanceToPlayer = PathFinding.Instance.GetPathLength(unit.GetUnitCurrentGridPosition(), playerUnit_.GetUnitCurrentGridPosition());
          
-            Debug.Log("DicToP: " + distanceToPlayer + "MovD: " + maxMoveDistance);
+            //Debug.Log("DicToP: " + distanceToPlayer + "MovD: " + maxMoveDistance);
             // if the unit is within the move range
             if (distanceToPlayer <= maxMoveDistance * 10)
             {

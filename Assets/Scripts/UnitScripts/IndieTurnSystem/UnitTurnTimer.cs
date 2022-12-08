@@ -23,13 +23,16 @@ public class UnitTurnTimer : MonoBehaviour
     private Vector3 startPos;
     private Vector3 endPos;
 
+    // the end point of the slider, shoule be 230 - 270
+    [SerializeField] float sliderEndPoint;
+
 
     private void Start()
     {
         // get the positions used for update the character Tag UI
         YPos = TimelineUI.Instance.GetSliderYValue();
         XStart = TimelineUI.Instance.GetMinSliderValue();
-        XEnd = TimelineUI.Instance.GetMaxSliderValue();
+        XEnd = sliderEndPoint;
         // calcualte the start and end position of the unit Tag UI
         startPos = new Vector3(XStart, -YPos, 0);
         endPos = new Vector3(XEnd, -YPos, 0);

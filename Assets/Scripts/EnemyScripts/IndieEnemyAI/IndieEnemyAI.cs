@@ -20,6 +20,11 @@ public class IndieEnemyAI : MonoBehaviour
     // refer to the character Tag UI
     private GameObject characterTagUI;
 
+    // the end point of the slider
+    [SerializeField] float sliderEndPoint;
+
+
+
     // state machine for AI
     private enum State
     {
@@ -68,7 +73,7 @@ public class IndieEnemyAI : MonoBehaviour
         // get the positions used for update the character Tag UI
         YPos = TimelineUI.Instance.GetSliderYValue();
         XStart = TimelineUI.Instance.GetMinSliderValue();
-        XEnd = TimelineUI.Instance.GetMaxSliderValue();
+        XEnd = sliderEndPoint;
         // calcualte the start and end position of the unit Tag UI
         startPos = new Vector3(XStart, YPos, 0);
         endPos = new Vector3(XEnd, YPos, 0);
